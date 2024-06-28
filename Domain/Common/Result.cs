@@ -10,8 +10,8 @@ public class Result
         if (!isSuccess && error == Error.None)
             throw new InvalidOperationException();
 
-        Error = error;
         IsSuccess = isSuccess;
+        Error = error;
     }
 
     public Error Error { get; }
