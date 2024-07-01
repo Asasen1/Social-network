@@ -71,4 +71,13 @@ public static class Errors
             return new("record.save.failure", $"{label} failed to save");
         }
     }
+
+    public static class User
+    {
+        public static Error HasFriend (string? name = null)
+        {
+            var label = name ?? "Value";
+            return new("cant.add.friend", $"List of friend contains {label}");
+        }
+    }
 }

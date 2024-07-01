@@ -7,8 +7,8 @@ namespace Domain.Entities;
 public class User : Entity
 {
     public FullName FullName { get; private set; }
-    public DateOnly BirthDate { get; private set; }
-    public string Description { get; private set; }
+    public DateOnly? BirthDate { get; private set; }
+    public string? Description { get; private set; }
     public DateTimeOffset CreatedDate { get; private set; }
     public IReadOnlyList<User> Friends => _friends;
     private readonly List<User> _friends = [];
@@ -20,8 +20,8 @@ public class User : Entity
     private User(
         Guid id, 
         FullName fullName, 
-        DateOnly birthDate, 
-        string description, 
+        DateOnly? birthDate, 
+        string? description, 
         DateTimeOffset createdDate)
         : base(id)
     {
@@ -35,10 +35,17 @@ public class User : Entity
         Guid id, 
         string firstName,
         string secondName,
-        DateOnly birthDate, 
-        string description, 
+        DateOnly? birthDate, 
+        string? description, 
         DateTimeOffset createdDate)
     {
+        firstName = firstName.Trim();
+        secondName = secondName.Trim();
+        if (firstName.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(firstName));
+        if (secondName.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(secondName));
+        
         return new User(
             id,
             FullName.Create(firstName, secondName).Value,
@@ -49,6 +56,8 @@ public class User : Entity
 
     public Result<List<User>> AddFriend(User friend)
     {
+        if (_friends.Contains(friend))
+            return Errors.User.HasFriend(nameof(friend));
         _friends.Add(friend);
         return _friends;
     }

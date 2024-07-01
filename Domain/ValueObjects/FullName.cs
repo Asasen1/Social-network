@@ -15,8 +15,10 @@ public class FullName
 
     public static Result<FullName> Create(string firstName, string secondName)
     {
-        firstName = firstName.Trim();
-        secondName = secondName.Trim();
+        firstName = firstName.Trim().ToLower();
+        secondName = secondName.Trim().ToLower();
+        firstName = char.ToUpper(firstName[0]) + firstName[1..];
+        secondName = char.ToUpper(secondName[0]) + secondName[1..];
         if (firstName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
