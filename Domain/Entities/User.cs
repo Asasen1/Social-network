@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Common.Models;
+using Domain.Entities.Photos;
 using Domain.ValueObjects;
 
 namespace Domain.Entities;
@@ -14,16 +15,14 @@ public class User : Entity
     private readonly List<User> _friends = [];
     public IReadOnlyList<Post> Posts => _posts;
     private readonly List<Post> _posts = [];
-    public IReadOnlyList<Photo> Photos => _photos;
-    private readonly List<Photo> _photos = [];
+    public IReadOnlyList<UserPhoto> Photos => _photos;
+    private readonly List<UserPhoto> _photos = [];
     
     private User(
-        Guid id, 
         FullName fullName, 
         DateOnly? birthDate, 
         string? description, 
         DateTimeOffset createdDate)
-        : base(id)
     {
         FullName = fullName;
         BirthDate = birthDate;
@@ -32,7 +31,6 @@ public class User : Entity
     }
 
     public static Result<User> Create(
-        Guid id, 
         string firstName,
         string secondName,
         DateOnly? birthDate, 
@@ -47,7 +45,6 @@ public class User : Entity
             return Errors.General.ValueIsRequired(nameof(secondName));
         
         return new User(
-            id,
             FullName.Create(firstName, secondName).Value,
             birthDate,
             description,

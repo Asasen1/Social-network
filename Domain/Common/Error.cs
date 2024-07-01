@@ -79,5 +79,18 @@ public static class Errors
             var label = name ?? "Value";
             return new("cant.add.friend", $"List of friend contains {label}");
         }
+        public static Error PhotoCountLimit()
+        {
+            return new("user.photo.limit", "Max photo count limit is 5");
+        }
+
+        public static Error FileTypeInvalid(string? fileType)
+        {
+            return new("invalid.file.type", $"This {fileType}: file type is invalid");
+        }
+        public static Error FileLengthInvalid(long? length)
+        {
+            return new("invalid.file.length", $"This {length}: file length is invalid");
+        }
     }
 }

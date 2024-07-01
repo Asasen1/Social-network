@@ -1,8 +1,10 @@
 ﻿using Domain.Common;
+using Domain.Common.Models;
+using Domain.Constants;
 
 namespace Domain.ValueObjects;
 
-public class FullName
+public class FullName : ValueObject
 {
     private string FirstName { get; set; }
     private string SecondName { get; set; }
@@ -23,13 +25,20 @@ public class FullName
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(secondName));
+        if (firstName.Length < UserConstants.MINIMUM_USER_NAME ||
+            firstName.Length > UserConstants.MAXIMUM_USER_NAME)
+            return Errors.General.InvalidLength(nameof(firstName));
+        if (secondName.Length < UserConstants.MINIMUM_USER_NAME ||
+            secondName.Length > UserConstants.MAXIMUM_USER_NAME)
+            return Errors.General.InvalidLength(nameof(firstName));
+        
         return new FullName(firstName, secondName);
     }
 
-    // protected override IEnumerable<IComparable> GetEqualityComponents()
-    // {
-    //     yield return FirstName;
-    //     yield return SecondName;
-    // }
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return FirstName;
+        yield return SecondName;
+    }
     
 }
