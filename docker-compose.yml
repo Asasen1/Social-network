@@ -1,6 +1,18 @@
 ﻿services:
-  api:
-    image: api
-    build:
-      context: .
-      dockerfile: API/Dockerfile
+#  api:
+#    image: api
+#    build:
+#      context: .
+#      dockerfile: API/Dockerfile
+  postgres:
+    container_name: postgres2
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: social_network
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5435:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
