@@ -8,6 +8,7 @@ namespace Domain.Entities;
 public class User : Entity
 {
     public FullName FullName { get; private set; }
+    public string Nickname { get; private set; }
     public DateOnly? BirthDate { get; private set; }
     public string? Description { get; private set; }
     public DateTimeOffset CreatedDate { get; private set; }
@@ -15,16 +16,18 @@ public class User : Entity
     private readonly List<User> _friends = [];
     public IReadOnlyList<Post> Posts => _posts;
     private readonly List<Post> _posts = [];
-    public IReadOnlyList<UserPhoto> Photos => _photos;
-    private readonly List<UserPhoto> _photos = [];
-    
+    public IReadOnlyList<Photo> Photos => _photos;
+    private readonly List<Photo> _photos = [];
+
     private User(
-        FullName fullName, 
-        DateOnly? birthDate, 
-        string? description, 
+        FullName fullName,
+        string nickname,
+        DateOnly? birthDate,
+        string? description,
         DateTimeOffset createdDate)
     {
         FullName = fullName;
+        Nickname = nickname;
         BirthDate = birthDate;
         Description = description;
         CreatedDate = createdDate;
@@ -33,9 +36,9 @@ public class User : Entity
     public static Result<User> Create(
         string firstName,
         string secondName,
-        DateOnly? birthDate, 
-        string? description, 
-        DateTimeOffset createdDate)
+        string nickname,
+        DateOnly? birthDate,
+        string? description)
     {
         firstName = firstName.Trim();
         secondName = secondName.Trim();
@@ -43,9 +46,10 @@ public class User : Entity
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(secondName));
-        
+
         return new User(
             FullName.Create(firstName, secondName).Value,
+            nickname,
             birthDate,
             description,
             DateTimeOffset.UtcNow);
@@ -54,8 +58,14 @@ public class User : Entity
     public Result<List<User>> AddFriend(User friend)
     {
         if (_friends.Contains(friend))
-            return Errors.User.HasFriend(nameof(friend));
+            return Errors.UserErrors.HasFriend(nameof(friend));
         _friends.Add(friend);
+        return _friends;
+    }
+
+    public Result<List<User>> DeleteFriend(User friend)
+    {
+        _friends.Remove(friend);
         return _friends;
     }
 }

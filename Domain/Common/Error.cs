@@ -72,7 +72,7 @@ public static class Errors
         }
     }
 
-    public static class User
+    public static class UserErrors
     {
         public static Error HasFriend (string? name = null)
         {

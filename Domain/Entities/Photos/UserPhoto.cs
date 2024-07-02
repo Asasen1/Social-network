@@ -1,8 +1,11 @@
-﻿namespace Domain.Entities.Photos;
+﻿using Domain.Common;
+using Domain.Constants;
+
+namespace Domain.Entities.Photos;
 
 public class UserPhoto : Photo
 {
-    public UserPhoto(string paths, bool isMain) : base(paths, isMain)
+    private UserPhoto(string paths, bool isMain) : base(paths, isMain)
     {
     }
 }

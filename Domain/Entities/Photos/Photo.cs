@@ -14,14 +14,14 @@ public class Photo : Entity
         Paths = paths;
         IsMain = isMain;
     }
-    protected static Result<Photo> CreateAndActivate(string path, string contentType, long length, bool isMain)
+    public static Result<object> CreateAndActivate(string path, string contentType, long length, bool isMain)
     {
         if (contentType != PhotoConstants.JPG && 
             contentType != PhotoConstants.JPEG && 
             contentType != PhotoConstants.PNG)
-            return Errors.User.FileTypeInvalid(contentType);
+            return Errors.UserErrors.FileTypeInvalid(contentType);
         if (length > 100000)
-            return Errors.User.FileLengthInvalid(length);
+            return Errors.UserErrors.FileLengthInvalid(length);
         return new Photo(path, isMain);
     }
 }

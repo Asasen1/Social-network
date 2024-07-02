@@ -1,6 +1,8 @@
 ﻿using Domain.Common;
 using Domain.Common.Models;
 using Domain.Constants;
+using Domain.Entities;
+using Domain.Entities.Photos;
 
 namespace Domain.ValueObjects;
 
@@ -31,7 +33,6 @@ public class FullName : ValueObject
         if (secondName.Length < UserConstants.MINIMUM_USER_NAME ||
             secondName.Length > UserConstants.MAXIMUM_USER_NAME)
             return Errors.General.InvalidLength(nameof(firstName));
-        
         return new FullName(firstName, secondName);
     }
 
