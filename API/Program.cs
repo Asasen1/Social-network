@@ -18,11 +18,11 @@ builder.Services.AddInfrastructure();
 
 
 var app = builder.Build();
-var scope = app.Services.CreateScope();
-
-var dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
-
-await dbContext.Database.MigrateAsync();
+// var scope = app.Services.CreateScope();
+//
+// var dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+//
+// await dbContext.Database.MigrateAsync();
 
 if (app.Environment.IsDevelopment())
 {

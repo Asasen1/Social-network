@@ -9,7 +9,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("user");
+        builder.ToTable("users");
         builder.HasKey(u => u.Id);
         builder.ComplexProperty(v => v.FullName, b =>
         {
@@ -23,8 +23,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasMaxLength(UserConstants.MAXIMUM_LENGTH_NAME);
         });
         builder.Property(u => u.Nickname).IsRequired().HasColumnName("nickname");
-        builder.Property(u => u.BirthDate).IsRequired().HasColumnName("birth_date");
-        builder.Property(u => u.Description).IsRequired().HasColumnName("description");
+        builder.Property(u => u.BirthDate).IsRequired(false).HasColumnName("birth_date");
+        builder.Property(u => u.Description).IsRequired(false).HasColumnName("description");
         builder.Property(u => u.CreatedDate).IsRequired().HasColumnName("created_date");
         builder.HasMany(u => u.Photos).WithOne().IsRequired(false);
         builder.HasMany(u => u.Posts).WithOne().IsRequired(false);

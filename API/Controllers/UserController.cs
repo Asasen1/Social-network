@@ -16,4 +16,7 @@ public class UserController : ApplicationController
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);
     }
+
+  
+    
 }

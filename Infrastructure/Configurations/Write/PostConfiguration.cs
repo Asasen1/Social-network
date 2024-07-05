@@ -9,6 +9,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
 {
     public void Configure(EntityTypeBuilder<Post> builder)
     {
+        builder.ToTable("posts");
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Header).IsRequired().HasColumnName("header");
         builder.Property(p => p.Text).IsRequired().HasColumnName("text");

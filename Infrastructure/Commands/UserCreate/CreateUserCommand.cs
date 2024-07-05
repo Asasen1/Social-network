@@ -6,11 +6,11 @@ namespace Infrastructure.Commands.UserCreate;
 
 public class CreateUserCommand
 {
-    private readonly WriteDbContext _writeDbContext;
+    private readonly SocialWriteDbContext _socialWriteDbContext;
 
-    public CreateUserCommand(WriteDbContext writeDbContext)
+    public CreateUserCommand(SocialWriteDbContext socialWriteDbContext)
     {
-        _writeDbContext = writeDbContext;
+        _socialWriteDbContext = socialWriteDbContext;
     }
 
     public async Task<Result<User>> Handle(CreateUserRequest request, CancellationToken ct)
@@ -21,8 +21,8 @@ public class CreateUserCommand
             request.Nickname,
             null,
             request.Description).Value;
-        await _writeDbContext.Users.AddAsync(user, ct);
-        await _writeDbContext.SaveChangesAsync(ct);
+        await _socialWriteDbContext.Users.AddAsync(user, ct);
+        await _socialWriteDbContext.SaveChangesAsync(ct);
         return user;
     }
 }
