@@ -27,5 +27,5 @@ public class WriteDbContext : DbContext
             type => type.FullName?.Contains("Configurations.Write") ?? false);
     }
 
-    private DbSet<User> Users => Set<User>();
+    public DbSet<User> Users => Set<User>();
 }

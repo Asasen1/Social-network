@@ -8,8 +8,8 @@ namespace Domain.ValueObjects;
 
 public class FullName : ValueObject
 {
-    private string FirstName { get; set; }
-    private string SecondName { get; set; }
+    public string FirstName { get; set; }
+    public string SecondName { get; set; }
 
     private FullName(string firstName, string secondName)
     {
@@ -27,11 +27,11 @@ public class FullName : ValueObject
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(secondName));
-        if (firstName.Length < UserConstants.MINIMUM_USER_NAME ||
-            firstName.Length > UserConstants.MAXIMUM_USER_NAME)
+        if (firstName.Length < UserConstants.MINIMUM_LENGTH_NAME ||
+            firstName.Length > UserConstants.MAXIMUM_LENGTH_NAME)
             return Errors.General.InvalidLength(nameof(firstName));
-        if (secondName.Length < UserConstants.MINIMUM_USER_NAME ||
-            secondName.Length > UserConstants.MAXIMUM_USER_NAME)
+        if (secondName.Length < UserConstants.MINIMUM_LENGTH_NAME ||
+            secondName.Length > UserConstants.MAXIMUM_LENGTH_NAME)
             return Errors.General.InvalidLength(nameof(firstName));
         return new FullName(firstName, secondName);
     }

@@ -5,11 +5,19 @@ namespace Domain.Entities.Photos;
 
 public class PostPhoto : Photo
 {
-    public PostPhoto(string paths, bool isMain) : base(paths, isMain)
+    public sealed override string Path { get; protected set; }
+    public sealed override bool IsMain { get; protected set; }
+
+    protected PostPhoto(string path, bool isMain)
     {
+        Path = path;
+        IsMain = isMain;
     }
-    public new static Result<object> CreateAndActivate(string path, string contentType, long length, bool isMain)
+
+    public static Result<PostPhoto> CreateAndActivate(string path, string contentType, long length, bool isMain)
     {
+        if (path.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(path));
         if (contentType != PhotoConstants.JPG && 
             contentType != PhotoConstants.JPEG && 
             contentType != PhotoConstants.PNG)
@@ -18,4 +26,5 @@ public class PostPhoto : Photo
             return Errors.UserErrors.FileLengthInvalid(length);
         return new PostPhoto(path, isMain);
     }
+
 }
