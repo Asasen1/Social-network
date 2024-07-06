@@ -16,9 +16,13 @@ public class User : Entity
     private readonly List<User> _friends = [];
     public IReadOnlyList<Post> Posts => _posts;
     private readonly List<Post> _posts = [];
-    public IReadOnlyList<Photo> Photos => _photos;
-    private readonly List<Photo> _photos = [];
+    public IReadOnlyList<UserPhoto> Photos => _photos;
+    private readonly List<UserPhoto> _photos = [];
 
+    public User()
+    {
+        
+    }
     private User(
         FullName fullName,
         string nickname,

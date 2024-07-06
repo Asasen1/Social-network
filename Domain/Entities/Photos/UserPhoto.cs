@@ -1,14 +1,20 @@
 ﻿using Domain.Common;
+using Domain.Common.Models;
 using Domain.Constants;
 
 namespace Domain.Entities.Photos;
 
-public class UserPhoto : Photo
+public class UserPhoto : Entity
 {
-    public sealed override string Path { get; protected set; }
-    public sealed override bool IsMain { get; protected set; }
+    public string Path { get; private set; }
+    public bool IsMain { get; private set; }
 
-    protected UserPhoto(string path, bool isMain)
+
+    public UserPhoto()
+    {
+        
+    }
+    private UserPhoto(string path, bool isMain)
     {
         Path = path;
         IsMain = isMain;
@@ -18,8 +24,8 @@ public class UserPhoto : Photo
     {
         if (path.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(path));
-        if (contentType != PhotoConstants.JPG && 
-            contentType != PhotoConstants.JPEG && 
+        if (contentType != PhotoConstants.JPG &&
+            contentType != PhotoConstants.JPEG &&
             contentType != PhotoConstants.PNG)
             return Errors.UserErrors.FileTypeInvalid(contentType);
         if (length > 100000)

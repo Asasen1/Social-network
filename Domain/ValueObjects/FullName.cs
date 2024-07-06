@@ -1,16 +1,15 @@
 ﻿using Domain.Common;
 using Domain.Common.Models;
 using Domain.Constants;
-using Domain.Entities;
-using Domain.Entities.Photos;
 
 namespace Domain.ValueObjects;
 
 public class FullName : ValueObject
 {
-    public string FirstName { get; set; }
-    public string SecondName { get; set; }
+    public string FirstName { get; }
+    public string SecondName { get; }
 
+   
     private FullName(string firstName, string secondName)
     {
         FirstName = firstName;

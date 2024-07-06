@@ -8,7 +8,7 @@ public static class DependencyRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped<SocialWriteDbContext>();
+        services.AddScoped<SocialWriteDbContext>(); 
         services.AddScoped<CreateUserCommand>();
         return services;
     }

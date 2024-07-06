@@ -1,14 +1,20 @@
 ﻿using Domain.Common;
+using Domain.Common.Models;
 using Domain.Constants;
 
 namespace Domain.Entities.Photos;
 
-public class PostPhoto : Photo
+public class PostPhoto : Entity
 {
-    public sealed override string Path { get; protected set; }
-    public sealed override bool IsMain { get; protected set; }
+    public string Path { get; private set; }
+    public bool IsMain { get; private set; }
+    public Guid PostId { get; private set; }
 
-    protected PostPhoto(string path, bool isMain)
+    public PostPhoto()
+    {
+        
+    }
+    private PostPhoto(string path, bool isMain)
     {
         Path = path;
         IsMain = isMain;

@@ -1,4 +1,5 @@
-﻿using Domain.Common.Models;
+﻿using Domain.Common;
+using Domain.Common.Models;
 using Domain.Entities.Photos;
 using Domain.ValueObjects;
 
@@ -8,15 +9,28 @@ public class Post : Entity
 {
     public string Header { get; private set; }
     public string Text { get; private set; }
-    public FullName Author { get; private set; }
-    public IReadOnlyList<Photo> Photos => _photos;
-    private readonly List<Photo> _photos = [];
-    
+    public Guid AuthorId { get; private set; }
+    public User Author { get; private set; }
+    public IReadOnlyList<PostPhoto> Photos => _photos;
+    private readonly List<PostPhoto> _photos = [];
 
-    public Post(Guid id, string header, string text, FullName author) : base(id)
+    public Post()
+    {
+        
+    }
+    private Post(string header, string text, Guid authorId)
     {
         Header = header;
         Text = text;
-        Author = author;
+        AuthorId = authorId;
+    }
+
+    public static Result<Post> Create(string header, string text, Guid authorId)
+    {
+        if (header.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(header));
+        if (text.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(text));
+        return new Post(header, text, authorId);
     }
 }
