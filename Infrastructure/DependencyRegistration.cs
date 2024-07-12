@@ -1,4 +1,5 @@
-﻿using Infrastructure.Commands.UserCreate;
+﻿using Infrastructure.Commands.AddFriend;
+using Infrastructure.Commands.UserCreate;
 using Infrastructure.DbContexts;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,8 +9,21 @@ public static class DependencyRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped<SocialWriteDbContext>(); 
+        services.AddScoped<SocialWriteDbContext>();
+        services.AddCommands();
+        services.AddQueries();
+        return services;
+    }
+
+    private static IServiceCollection AddCommands(this IServiceCollection services)
+    {
         services.AddScoped<CreateUserCommand>();
+        services.AddScoped<AddFriendCommand>();
+        return services;
+    }
+
+    static IServiceCollection AddQueries(this IServiceCollection services)
+    {
         return services;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Common;
 using Domain.Common.Models;
 using Domain.Entities.Photos;
 using Domain.ValueObjects;
@@ -21,8 +22,8 @@ public class User : Entity
 
     public User()
     {
-        
     }
+
     private User(
         FullName fullName,
         string nickname,

@@ -8,7 +8,7 @@ public class PostPhoto : Entity
 {
     public string Path { get; private set; }
     public bool IsMain { get; private set; }
-    public Guid PostId { get; private set; }
+   
 
     public PostPhoto()
     {

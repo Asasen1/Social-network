@@ -1,5 +1,6 @@
 ﻿using Domain.Constants;
 using Domain.Entities;
+using Domain.Entities.Photos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -28,6 +29,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.CreatedDate).IsRequired().HasColumnName("created_date");
         builder.HasMany(u => u.Photos).WithOne().IsRequired(false);
         builder.HasMany(u => u.Posts).WithOne().IsRequired(false);
-        builder.HasMany(u => u.Friends).WithOne().IsRequired(false);
+        builder
+            .HasMany(u => u.Friends)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("user_friends"));
     }
 }
