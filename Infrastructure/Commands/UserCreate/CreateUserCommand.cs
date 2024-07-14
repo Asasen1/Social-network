@@ -1,19 +1,20 @@
-﻿using Domain.Common;
+﻿using Application.Abstractions;
+using Domain.Common;
 using Domain.Entities;
 using Infrastructure.DbContexts;
 
 namespace Infrastructure.Commands.UserCreate;
 
-public class CreateUserCommand
+public class CreateUserCommand : ICommandHandler<CreateUserRequest>
 {
-    private readonly SocialWriteDbContext _socialWriteDbContext;
+    private readonly WriteDbContext _writeDbContext;
 
-    public CreateUserCommand(SocialWriteDbContext socialWriteDbContext)
+    public CreateUserCommand(WriteDbContext writeDbContext)
     {
-        _socialWriteDbContext = socialWriteDbContext;
+        _writeDbContext = writeDbContext;
     }
 
-    public async Task<Result<User>> Handle(CreateUserRequest request, CancellationToken ct)
+    public async Task<Result> Handle(CreateUserRequest request, CancellationToken ct)
     {
         var user = User.Create(
             request.FirstName,
@@ -21,8 +22,8 @@ public class CreateUserCommand
             request.Nickname,
             null,
             request.Description).Value;
-        await _socialWriteDbContext.Users.AddAsync(user, ct);
-        await _socialWriteDbContext.SaveChangesAsync(ct);
-        return user;
+        await _writeDbContext.Users.AddAsync(user, ct);
+        await _writeDbContext.SaveChangesAsync(ct);
+        return Result.Success();
     }
 }

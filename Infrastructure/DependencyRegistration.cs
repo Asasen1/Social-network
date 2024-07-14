@@ -9,7 +9,8 @@ public static class DependencyRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped<SocialWriteDbContext>();
+        services.AddScoped<WriteDbContext>();
+        services.AddScoped<ReadDbContext>();
         services.AddCommands();
         services.AddQueries();
         return services;

@@ -15,7 +15,7 @@ public class UserController : ApplicationController
         var idResult = await command.Handle(request, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
-        return Ok(idResult.Value);
+        return Ok();
     }
 
     [HttpPost("Friend")]
@@ -27,6 +27,6 @@ public class UserController : ApplicationController
         var idResult = await command.Handle(request, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
-        return Ok(idResult.Value);
+        return Ok();
     }
 }

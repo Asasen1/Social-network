@@ -21,6 +21,8 @@
 
     <ItemGroup>
       <Folder Include="Configurations\Read\" />
+      <Folder Include="Queries\" />
+      <Folder Include="ReadModels\" />
     </ItemGroup>
 
 </Project>

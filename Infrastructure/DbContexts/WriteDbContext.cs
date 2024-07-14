@@ -6,10 +6,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.DbContexts;
 
-public class SocialWriteDbContext : DbContext
+public class WriteDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
-    public SocialWriteDbContext(IConfiguration configuration)
+    public WriteDbContext(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -28,7 +28,7 @@ public class SocialWriteDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(SocialWriteDbContext).Assembly,
+            typeof(WriteDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
     }
 
