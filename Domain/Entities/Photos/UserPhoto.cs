@@ -10,7 +10,7 @@ public class UserPhoto : Entity
     public bool IsMain { get; private set; }
     
 
-    public UserPhoto()
+    private UserPhoto()
     {
         
     }

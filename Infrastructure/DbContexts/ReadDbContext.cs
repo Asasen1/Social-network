@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.ReadModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -13,11 +14,21 @@ public class ReadDbContext : DbContext
         _configuration = configuration;
     }
 
+    public DbSet<UserReadModel> Users => Set<UserReadModel>();
+    public DbSet<PostReadModel> Posts => Set<PostReadModel>();
+    public DbSet<PostPhotoReadModel> PostPhotos => Set<PostPhotoReadModel>();
+    public DbSet<UserPhotoReadModel> UserPhotos => Set<UserPhotoReadModel>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("SocialNetwork"));
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
         optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(ReadDbContext).Assembly,
+            type => type.FullName?.Contains("Configurations.Read") ?? false);
     }
 }

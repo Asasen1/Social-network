@@ -20,7 +20,7 @@ public class User : Entity
     public IReadOnlyList<UserPhoto> Photos => _photos;
     private readonly List<UserPhoto> _photos = [];
 
-    public User()
+    private User()
     {
     }
 

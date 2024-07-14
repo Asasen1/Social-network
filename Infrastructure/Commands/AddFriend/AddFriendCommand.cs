@@ -1,4 +1,5 @@
-﻿using Application.Abstractions;
+﻿using System.Data;
+using Application.Abstractions;
 using Domain.Common;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;

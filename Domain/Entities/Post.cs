@@ -12,7 +12,7 @@ public class Post : Entity
     public IReadOnlyList<PostPhoto> Photos => _photos;
     private readonly List<PostPhoto> _photos = [];
 
-    public Post()
+    private Post()
     {
         
     }

@@ -10,7 +10,7 @@ public class PostPhoto : Entity
     public bool IsMain { get; private set; }
    
 
-    public PostPhoto()
+    private PostPhoto()
     {
         
     }
