@@ -17,6 +17,6 @@ public class PostReadModelConfiguration : IEntityTypeConfiguration<PostReadModel
         builder
             .HasOne<UserReadModel>()
             .WithMany()
-            .HasForeignKey(p => p.UserId); //TODO
+            .HasForeignKey(p => p.UserId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.UserCreate;
 using Infrastructure.DbContexts;
+using Infrastructure.Queries.GetUserById;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
@@ -23,8 +24,9 @@ public static class DependencyRegistration
         return services;
     }
 
-    static IServiceCollection AddQueries(this IServiceCollection services)
+    private static IServiceCollection AddQueries(this IServiceCollection services)
     {
+        services.AddScoped<GetUserByIdQuery>();
         return services;
     }
 }

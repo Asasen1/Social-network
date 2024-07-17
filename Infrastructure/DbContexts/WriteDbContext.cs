@@ -14,9 +14,6 @@ public class WriteDbContext : DbContext
         _configuration = configuration;
     }
     public DbSet<User> Users => Set<User>();
-    public DbSet<Post> Posts => Set<Post>();
-    public DbSet<PostPhoto> PostPhotos => Set<PostPhoto>();
-    public DbSet<UserPhoto> UserPhotos => Set<UserPhoto>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

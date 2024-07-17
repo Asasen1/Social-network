@@ -2,7 +2,7 @@
 
 namespace Application.Abstractions;
 
-public interface IQueryHandler<TResponse, TRequest>
+public interface IQueryHandler<TRequest, TResponse>
 {
-    public Task<Result<TResponse>> Handle(TRequest request);
+    public Task<Result<TResponse>> Handle(TRequest request, CancellationToken ct);
 }

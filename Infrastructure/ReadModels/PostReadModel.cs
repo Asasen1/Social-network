@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Photos;
+﻿using Domain.Entities;
+using Domain.Entities.Photos;
 
 namespace Infrastructure.ReadModels;
 

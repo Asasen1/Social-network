@@ -2,7 +2,7 @@
 
 namespace Application.Abstractions;
 
-public interface ICommandHandler<T>
+public interface ICommandHandler<TRequest>
 {
-    public Task<Result> Handle(T command, CancellationToken ct);
+    public Task<Result> Handle(TRequest command, CancellationToken ct);
 }

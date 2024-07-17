@@ -16,7 +16,7 @@ public class UserReadModelConfiguration : IEntityTypeConfiguration<UserReadModel
             .IsRequired(false);
         builder
             .HasMany(u => u.Posts)
-            .WithOne()
+            .WithOne() 
             .HasForeignKey(u => u.UserId)
             .IsRequired(false);
         builder

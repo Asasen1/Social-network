@@ -15,9 +15,6 @@ public class ReadDbContext : DbContext
     }
 
     public DbSet<UserReadModel> Users => Set<UserReadModel>();
-    public DbSet<PostReadModel> Posts => Set<PostReadModel>();
-    public DbSet<PostPhotoReadModel> PostPhotos => Set<PostPhotoReadModel>();
-    public DbSet<UserPhotoReadModel> UserPhotos => Set<UserPhotoReadModel>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("SocialNetwork"));

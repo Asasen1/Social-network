@@ -19,7 +19,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsRequired()
                 .HasMaxLength(UserConstants.MAXIMUM_LENGTH_NAME);
             b.Property(f => f.SecondName)
-                .HasColumnName("last_name")
+                .HasColumnName("second_name")
                 .IsRequired()
                 .HasMaxLength(UserConstants.MAXIMUM_LENGTH_NAME);
         });
@@ -27,8 +27,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.BirthDate).IsRequired(false).HasColumnName("birth_date");
         builder.Property(u => u.Description).IsRequired(false).HasColumnName("description");
         builder.Property(u => u.CreatedDate).IsRequired().HasColumnName("created_date");
-        builder.HasMany(u => u.Photos).WithOne().IsRequired(false);
-        builder.HasMany(u => u.Posts).WithOne().IsRequired(false);
+        builder.HasMany(u => u.Photos).WithOne().IsRequired();
+        builder.HasMany(u => u.Posts).WithOne().IsRequired();
         builder
             .HasMany(u => u.Friends)
             .WithMany()

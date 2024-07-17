@@ -13,6 +13,6 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Header).IsRequired().HasColumnName("header");
         builder.Property(p => p.Text).IsRequired().HasColumnName("text");
-        builder.HasMany(p => p.Photos).WithOne().IsRequired(false);
+        builder.HasMany(p => p.Photos).WithOne().IsRequired();
     }
 }
