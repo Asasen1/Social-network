@@ -13,12 +13,13 @@ public class UserReadModelConfiguration : IEntityTypeConfiguration<UserReadModel
         builder
             .HasMany(u => u.Photos)
             .WithOne()
-            .IsRequired(false);
+            .HasForeignKey(u => u.UserId)
+            .IsRequired();
         builder
             .HasMany(u => u.Posts)
             .WithOne() 
             .HasForeignKey(u => u.UserId)
-            .IsRequired(false);
+            .IsRequired();
         builder
             .HasMany(u => u.Friends)
             .WithMany()

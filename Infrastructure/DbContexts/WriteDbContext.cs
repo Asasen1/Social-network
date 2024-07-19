@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.Photos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

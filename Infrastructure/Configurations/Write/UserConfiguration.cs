@@ -1,6 +1,5 @@
 ﻿using Domain.Constants;
 using Domain.Entities;
-using Domain.Entities.Photos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,11 +16,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             b.Property(f => f.FirstName)
                 .HasColumnName("first_name")
                 .IsRequired()
-                .HasMaxLength(UserConstants.MAXIMUM_LENGTH_NAME);
+                .HasMaxLength(UserConstants.MAX_LENGTH_NAME);
             b.Property(f => f.SecondName)
                 .HasColumnName("second_name")
                 .IsRequired()
-                .HasMaxLength(UserConstants.MAXIMUM_LENGTH_NAME);
+                .HasMaxLength(UserConstants.MAX_LENGTH_NAME);
         });
         builder.Property(u => u.Nickname).IsRequired().HasColumnName("nickname");
         builder.Property(u => u.BirthDate).IsRequired(false).HasColumnName("birth_date");

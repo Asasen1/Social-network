@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Common;
 using Domain.Common.Models;
-using Domain.Entities.Photos;
 using Domain.ValueObjects;
 
 namespace Domain.Entities;

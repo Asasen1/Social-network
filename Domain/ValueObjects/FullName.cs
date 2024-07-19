@@ -26,11 +26,11 @@ public class FullName : ValueObject
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(secondName));
-        if (firstName.Length < UserConstants.MINIMUM_LENGTH_NAME ||
-            firstName.Length > UserConstants.MAXIMUM_LENGTH_NAME)
+        if (firstName.Length < UserConstants.MIN_LENGTH_NAME ||
+            firstName.Length > UserConstants.MAX_LENGTH_NAME)
             return Errors.General.InvalidLength(nameof(firstName));
-        if (secondName.Length < UserConstants.MINIMUM_LENGTH_NAME ||
-            secondName.Length > UserConstants.MAXIMUM_LENGTH_NAME)
+        if (secondName.Length < UserConstants.MIN_LENGTH_NAME ||
+            secondName.Length > UserConstants.MAX_LENGTH_NAME)
             return Errors.General.InvalidLength(nameof(firstName));
         return new FullName(firstName, secondName);
     }

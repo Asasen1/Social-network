@@ -31,7 +31,7 @@ public class UserController : ApplicationController
         return Ok(idResult.Value);
     }
 
-    [HttpPost("Friend")]
+    [HttpPost("friend")]
     public async Task<IActionResult> PublishFriend(
         [FromServices] AddFriendCommand command,
         [FromBody] AddFriendRequest request,

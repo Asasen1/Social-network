@@ -1,9 +1,10 @@
-﻿using Domain.Entities.Photos;
+﻿namespace Application.DTO;
 
-namespace Application.DTO;
-
-public record UserDto(string FirstName,
+public record UserDto(
+    Guid Id,
+    string FirstName,
     string SecondName,
     string Nickname,
     DateOnly? BirthDate,
-    string? Description);
+    string? Description,
+    PhotoDto? Avatar = null!);

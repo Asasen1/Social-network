@@ -2,13 +2,14 @@
 using Domain.Common.Models;
 using Domain.Constants;
 
-namespace Domain.Entities.Photos;
+namespace Domain.Entities;
 
 public class UserPhoto : Entity
 {
     public string Path { get; private set; }
     public bool IsMain { get; private set; }
-    
+    // public IReadOnlyList<Like> Likes => _likes;
+    // private readonly List<Like> _likes = [];
 
     private UserPhoto()
     {

@@ -14,5 +14,9 @@ public class UserPhotoReadModelConfiguration : IEntityTypeConfiguration<UserPhot
             .HasOne<UserReadModel>()
             .WithMany()
             .HasForeignKey(u => u.UserId);
+        // builder
+        //     .ToTable("likes")
+        //     .HasMany(u => u.Likes)
+        //     .WithOne().IsRequired();
     }
 }

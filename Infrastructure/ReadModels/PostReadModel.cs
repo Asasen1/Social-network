@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Entities.Photos;
 
 namespace Infrastructure.ReadModels;
 
@@ -10,5 +9,6 @@ public class PostReadModel
     public string Header { get; init; } = string.Empty;
     public string Text { get; init; } = string.Empty;
     public List<PostPhotoReadModel> Photos = [];
-
+    public List<LikeReadModel> Likes = [];
+    public List<CommentReadModel> Comments = [];
 }

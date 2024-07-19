@@ -2,7 +2,7 @@
 using Domain.Common.Models;
 using Domain.Constants;
 
-namespace Domain.Entities.Photos;
+namespace Domain.Entities;
 
 public class PostPhoto : Entity
 {

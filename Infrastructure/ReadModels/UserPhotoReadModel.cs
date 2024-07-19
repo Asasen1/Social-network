@@ -6,4 +6,5 @@ public class UserPhotoReadModel
     public Guid UserId { get; init; }
     public string Path { get; init; } = string.Empty;
     public bool IsMain { get; init; }
+    // public List<LikeReadModel> Likes = [];
 }

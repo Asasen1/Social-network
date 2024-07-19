@@ -18,5 +18,7 @@ public class PostReadModelConfiguration : IEntityTypeConfiguration<PostReadModel
             .HasOne<UserReadModel>()
             .WithMany()
             .HasForeignKey(p => p.UserId);
+        builder.HasMany(p => p.Likes).WithOne().IsRequired();
+        builder.HasMany(p => p.Comments).WithOne().IsRequired();
     }
 }
