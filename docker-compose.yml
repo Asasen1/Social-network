@@ -16,3 +16,16 @@
       - 5435:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data/
+  minio:
+    container_name: minio2
+    image: minio/minio
+    ports:
+      - 9001:9001
+      - 9002:9002
+    volumes:
+      - minio_data:/data
+    command: server --console-address ":9002" /data
+    restart: always
+volumes:
+  postgres-data:
+  minio_data:
