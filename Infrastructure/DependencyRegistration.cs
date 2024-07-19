@@ -1,6 +1,8 @@
-﻿using Infrastructure.Commands.AddFriend;
+﻿using Application.Providers;
+using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.UserCreate;
 using Infrastructure.DbContexts;
+using Infrastructure.Providers;
 using Infrastructure.Queries.GetUserById;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +29,11 @@ public static class DependencyRegistration
     private static IServiceCollection AddQueries(this IServiceCollection services)
     {
         services.AddScoped<GetUserByIdQuery>();
+        return services;
+    }
+    private static IServiceCollection AddProviders(this IServiceCollection services)
+    {
+        services.AddScoped<IMinIoProvider, MinIoProvider>();
         return services;
     }
 }

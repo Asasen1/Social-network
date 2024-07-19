@@ -26,6 +26,9 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .HasMany(p => p.Likes)
             .WithOne()
             .IsRequired();
-        builder.HasMany(p => p.Comments).WithOne().IsRequired();
+        builder
+            .HasMany(p => p.Comments)
+            .WithOne()
+            .IsRequired();
     }
 }

@@ -8,8 +8,7 @@ public class LikeConfiguration : IEntityTypeConfiguration<Like>
 {
     public void Configure(EntityTypeBuilder<Like> builder)
     {
+        builder.ToTable("likes");
         builder.HasKey(l => l.Id);
-        // builder.HasOne(l => l.Post).WithMany().IsRequired();
-        // builder.HasOne(l => l.User).WithMany().IsRequired();
     }
 }

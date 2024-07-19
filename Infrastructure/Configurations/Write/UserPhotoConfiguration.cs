@@ -13,6 +13,5 @@ public class UserPhotoConfiguration : IEntityTypeConfiguration<UserPhoto>
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Path).IsRequired().HasColumnName("path");
         builder.Property(p => p.IsMain).IsRequired().HasColumnName("is_main");
-        // builder.ToTable("likes_user_photos").HasMany(u => u.Likes).WithMany();
     }
 }

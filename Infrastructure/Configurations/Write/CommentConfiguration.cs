@@ -11,8 +11,6 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
     {
         builder.ToTable("comments");
         builder.HasKey(c => c.Id);
-        builder.Property(c => c.Text).HasMaxLength(200).HasColumnName("text");
-        // builder.HasOne(c => c.Post).WithMany();
-        // builder.HasOne(c => c.User).WithMany();
+        builder.Property(c => c.Text).HasMaxLength(2000).HasColumnName("text");
     }
 }

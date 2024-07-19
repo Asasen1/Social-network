@@ -12,7 +12,6 @@ public class CommentReadModelConfiguration : IEntityTypeConfiguration<CommentRea
         builder.HasKey(c => c.Id);
         builder
             .Property(c => c.Text)
-            .HasMaxLength(200)
             .HasColumnName("text");
         builder
             .HasOne<PostReadModel>()

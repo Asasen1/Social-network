@@ -63,6 +63,8 @@ public class User : Entity
     {
         if (_friends.Contains(friend))
             return Errors.UserErrors.HasFriend(nameof(friend));
+        if (friend._friends.Contains(this))
+            return Errors.UserErrors.HasFriend();
         _friends.Add(friend);
         return _friends;
     }

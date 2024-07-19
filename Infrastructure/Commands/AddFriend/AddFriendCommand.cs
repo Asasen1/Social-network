@@ -20,8 +20,6 @@ public class AddFriendCommand(WriteDbContext dbContext) : ICommandHandler<AddFri
             return Errors.General.NotFound(request.UserId);
         if (friend == null)
             return Errors.General.NotFound(request.FriendId);
-        if (friend.Friends.Contains(user))
-            return Errors.UserErrors.HasFriend(nameof(friend));
         
         var idResult = user.AddFriend(friend);
 
