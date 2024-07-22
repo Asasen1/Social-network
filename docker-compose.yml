@@ -20,11 +20,11 @@
     container_name: minio2
     image: minio/minio
     ports:
+      - 9000:9000
       - 9001:9001
-      - 9002:9002
     volumes:
       - minio_data:/data
-    command: server --console-address ":9002" /data
+    command: server --console-address ":9001" /data
     restart: always
 volumes:
   postgres-data:
