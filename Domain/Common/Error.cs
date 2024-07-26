@@ -79,6 +79,11 @@ public static class Errors
             var label = name ?? "Value";
             return new("cant.add.friend", $"List of friend contains {label}");
         }
+        public static Error NotUnique (string? name = null)
+        {
+            var label = name ?? "Value";
+            return new("not.unique.nickname", $"Nickname not unique {label}");
+        }
         public static Error PhotoCountLimit()
         {
             return new("user.photo.limit", "Max photo count limit is 5");
