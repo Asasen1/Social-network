@@ -10,7 +10,7 @@ public class UserController : ApplicationController
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateUserCommand command,
-        CreateUserRequest request,
+        [FromForm]CreateUserRequest request,
         CancellationToken ct)
     {
         var idResult = await command.Handle(request, ct);

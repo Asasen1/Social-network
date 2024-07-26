@@ -7,6 +7,7 @@ public static class DependencyRegistration
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(typeof(DependencyRegistration).Assembly);
+        // services.AddScoped<IValidator<User>, UserValidator>();
         return services;
     }
 }

@@ -31,7 +31,7 @@ public class FullName : ValueObject
             return Errors.General.InvalidLength(nameof(firstName));
         if (secondName.Length < UserConstants.MIN_LENGTH_NAME ||
             secondName.Length > UserConstants.MAX_LENGTH_NAME)
-            return Errors.General.InvalidLength(nameof(firstName));
+            return Errors.General.InvalidLength(nameof(secondName));
         return new FullName(firstName, secondName);
     }
 

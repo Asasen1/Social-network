@@ -16,13 +16,18 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
 
     public async Task<Result> Handle(CreateUserRequest request, CancellationToken ct)
     {
+        var isParse = DateOnly.TryParse(request.BirthDate, out var birth);
+        if (!isParse)
+            return Errors.General.ValueIsInvalid(nameof(request.BirthDate));
         var user = User.Create(
             request.FirstName,
             request.SecondName,
             request.Nickname,
-            null,
-            request.Description).Value;
-        await _writeDbContext.Users.AddAsync(user, ct);
+            birth,
+            request.Description);
+        if (user.IsFailure)
+            return user.Error;
+        await _writeDbContext.Users.AddAsync(user.Value, ct);
         await _writeDbContext.SaveChangesAsync(ct);
         return Result.Success();
     }

@@ -1,4 +1,4 @@
-﻿using Domain.Constants;
+﻿using Application.CommonValidators;
 using Domain.Entities;
 using FluentValidation;
 
@@ -10,10 +10,26 @@ public class UserValidator : AbstractValidator<User>
     {
         RuleFor(u => u.FullName).ChildRules(rules =>
         {
-            rules.RuleFor(f => f.FirstName).NotEmpty().NotNull().MinimumLength(1).MaximumLength(20).WithMessage("");
-            rules.RuleFor(f => f.SecondName).NotEmpty().NotNull().MinimumLength(1).MaximumLength(20);
+            rules.RuleFor(f => f.FirstName)
+                // .NotEmptyWithError()
+                // .NotNullWithError()
+                .MinimumLengthWithError(1)
+                .MaximumLengthWithError(20);
+            rules.RuleFor(f => f.SecondName)
+                .NotEmptyWithError()
+                .NotNullWithError()
+                .MinimumLengthWithError(1)
+                .MaximumLengthWithError(20);
         });
-        RuleFor(u => u.Description).MaximumLength(50);
-        RuleFor(u => u.Nickname).MaximumLength(10).NotEmpty().NotNull().MinimumLength(3);
+        RuleFor(u => u.Description)!
+            .MaximumLengthWithError(50);
+        RuleFor(u => u.Nickname)
+            .MaximumLengthWithError(10)
+            .NotEmptyWithError()
+            .NotNullWithError()
+            .MinimumLengthWithError(3);
+        RuleFor(u => u.Friends.Count.ToString()).MaximumLengthWithError(10000);
+        RuleFor(u => u.Posts.Count.ToString()).MaximumLengthWithError(1000);
+        RuleFor(u => u.Photos.Count.ToString()).MaximumLengthWithError(1000);
     }
 }

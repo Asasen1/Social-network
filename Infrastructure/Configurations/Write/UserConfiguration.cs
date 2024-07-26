@@ -17,9 +17,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("first_name")
                 .IsRequired()
                 .HasMaxLength(UserConstants.MAX_LENGTH_NAME);
-            b.Property(f => f.SecondName)
-                .HasColumnName("second_name")
-                .IsRequired()
+                b.Property(f => f.SecondName)
+                    .HasColumnName("second_name")
+                    .IsRequired()
                 .HasMaxLength(UserConstants.MAX_LENGTH_NAME);
         });
         builder.Property(u => u.Nickname).IsRequired().HasColumnName("nickname");

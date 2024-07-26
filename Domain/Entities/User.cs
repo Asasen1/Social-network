@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Common;
+﻿using Domain.Common;
 using Domain.Common.Models;
 using Domain.ValueObjects;
 
@@ -46,13 +45,18 @@ public class User : Entity
     {
         firstName = firstName.Trim();
         secondName = secondName.Trim();
+        
         if (firstName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(secondName));
-
+        
+        var fullname = FullName.Create(firstName, secondName);
+        if (fullname.IsFailure)
+            return fullname.Error;
+        
         return new User(
-            FullName.Create(firstName, secondName).Value,
+            fullname.Value,
             nickname,
             birthDate,
             description,

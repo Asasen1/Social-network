@@ -29,12 +29,30 @@ public static class CustomValidators
             .WithError(Errors.General.ValueIsRequired());
     }
 
+    public static IRuleBuilderOptions<T, TProperty> NotNullWithError<T, TProperty>(
+        this IRuleBuilder<T, TProperty> ruleBuilder)
+    {
+        return ruleBuilder
+            .NotNull()
+            .WithError(Errors.General.ValueIsRequired());
+    }
+
+
     public static IRuleBuilderOptions<T, string> MaximumLengthWithError<T>(
         this IRuleBuilder<T, string> ruleBuilder,
         int maxLength)
     {
         return ruleBuilder
             .MaximumLength(maxLength)
+            .WithError(Errors.General.InvalidLength());
+    }
+
+    public static IRuleBuilderOptions<T, string> MinimumLengthWithError<T>(
+        this IRuleBuilder<T, string> ruleBuilder,
+        int minLength)
+    {
+        return ruleBuilder
+            .MinimumLength(minLength)
             .WithError(Errors.General.InvalidLength());
     }
 
@@ -64,6 +82,7 @@ public static class CustomValidators
             .LessThan(valueToCompare)
             .WithError(Errors.General.InvalidLength());
     }
+
     public static IRuleBuilderOptions<T, TProperty> MustBePhoto<T, TProperty>(
         this IRuleBuilder<T, TProperty> ruleBuilder)
         where TProperty : IFormFile
@@ -79,6 +98,7 @@ public static class CustomValidators
         //     context.AddFailure(Errors.Volunteers.FileTypeInvalid(value.ContentType));
         // });
     }
+
     public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
         this IRuleBuilderOptions<T, TProperty> rule, Error error)
     {
