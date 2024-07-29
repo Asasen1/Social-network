@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Minio;
+using Scrutor;
 
 namespace Infrastructure;
 
@@ -20,23 +21,18 @@ public static class DependencyRegistration
         services.AddScoped<WriteDbContext>();
         services.AddScoped<ReadDbContext>();
         services.AddProviders();
-        services.AddCommands();
-        services.AddQueries();
+        services.AddCommandsAndQueries();
         services.AddDataStorages(configuration);
         return services;
     }
 
-    private static IServiceCollection AddCommands(this IServiceCollection services)
+    private static IServiceCollection AddCommandsAndQueries(this IServiceCollection services)
     {
-        services.AddScoped<UploadPhotoCommand>();
-        services.AddScoped<CreateUserCommand>();
-        services.AddScoped<AddFriendCommand>();
-        return services;
-    }
-
-    private static IServiceCollection AddQueries(this IServiceCollection services)
-    {
-        services.AddScoped<GetUserByIdQuery>();
+        services.Scan(selector => selector
+            .FromAssemblies(typeof(DependencyRegistration).Assembly)
+            .AddClasses(filter => filter.Where(x => x.Name.EndsWith("Command") ||
+                                                    x.Name.EndsWith("Query")))
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip));
         return services;
     }
     private static IServiceCollection AddProviders(this IServiceCollection services)
