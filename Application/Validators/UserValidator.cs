@@ -11,8 +11,8 @@ public class UserValidator : AbstractValidator<User>
         RuleFor(u => u.FullName).ChildRules(rules =>
         {
             rules.RuleFor(f => f.FirstName)
-                // .NotEmptyWithError()
-                // .NotNullWithError()
+                .NotEmptyWithError()
+                .NotNullWithError()
                 .MinimumLengthWithError(1)
                 .MaximumLengthWithError(20);
             rules.RuleFor(f => f.SecondName)

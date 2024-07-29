@@ -22,7 +22,7 @@ public class MinIoProvider : IMinIoProvider
     {
         try
         {
-            var bucketExistsArgs = new BucketExistsArgs();
+            var bucketExistsArgs = new BucketExistsArgs().WithBucket(PhotoBucket);
             var isExist = await _minioClient.BucketExistsAsync(bucketExistsArgs, ct);
             if (isExist)
             {

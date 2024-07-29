@@ -1,5 +1,6 @@
 ﻿using Application.Providers;
 using Infrastructure.Commands.AddFriend;
+using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
 using Infrastructure.DbContexts;
 using Infrastructure.Options;
@@ -18,6 +19,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<WriteDbContext>();
         services.AddScoped<ReadDbContext>();
+        services.AddProviders();
         services.AddCommands();
         services.AddQueries();
         services.AddDataStorages(configuration);
@@ -26,6 +28,7 @@ public static class DependencyRegistration
 
     private static IServiceCollection AddCommands(this IServiceCollection services)
     {
+        services.AddScoped<UploadPhotoCommand>();
         services.AddScoped<CreateUserCommand>();
         services.AddScoped<AddFriendCommand>();
         return services;

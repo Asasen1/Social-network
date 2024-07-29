@@ -78,4 +78,9 @@ public class User : Entity
         _friends.Remove(friend);
         return _friends;
     }
+    public Result<List<UserPhoto>> AddPhoto(UserPhoto photo)
+    {
+        _photos.Add(photo);
+        return _photos;
+    }
 }
