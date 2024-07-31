@@ -1,14 +1,9 @@
 ﻿using Application.Providers;
-using Infrastructure.Commands.AddFriend;
-using Infrastructure.Commands.UploadPhoto;
-using Infrastructure.Commands.UserCreate;
 using Infrastructure.DbContexts;
 using Infrastructure.Options;
 using Infrastructure.Providers;
-using Infrastructure.Queries.GetUserById;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Minio;
 using Scrutor;
 
@@ -37,7 +32,7 @@ public static class DependencyRegistration
     }
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
-        services.AddScoped<IMinIoProvider, MinIoProvider>();
+        services.AddScoped<IMinioProvider, MinioProvider>();
         return services;
     }
     private static IServiceCollection AddDataStorages(this IServiceCollection services, IConfiguration configuration)

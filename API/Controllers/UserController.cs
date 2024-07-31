@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Commands.AddFriend;
+using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
 using Infrastructure.Queries.GetUserById;
@@ -48,6 +49,17 @@ public class UserController : ApplicationController
     public async Task<IActionResult> PublishPhoto(
         [FromServices] UploadPhotoCommand command,
         [FromForm] UploadPhotoRequest request,
+        CancellationToken ct)
+    {
+        var idResult = await command.Handle(request, ct);
+        if (idResult.IsFailure)
+            return BadRequest(idResult.Error);
+        return Ok();
+    }
+    [HttpDelete("photo")]
+    public async Task<IActionResult> DeletePhoto(
+        [FromServices] DeletePhotoCommand command,
+        [FromForm] DeletePhotoRequest request,
         CancellationToken ct)
     {
         var idResult = await command.Handle(request, ct);

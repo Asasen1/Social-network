@@ -70,6 +70,11 @@ public static class Errors
             var label = name ?? "Value";
             return new("record.save.failure", $"{label} failed to save");
         }
+        public static Error RemoveFailure(string? name = null)
+        {
+            var label = name ?? "Value";
+            return new("record.remove.failure", $"{label} failed to remove");
+        }
     }
 
     public static class UserErrors
