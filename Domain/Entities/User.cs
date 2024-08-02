@@ -6,7 +6,9 @@ namespace Domain.Entities;
 
 public class User : Entity
 {
+    public string PasswordHash { get; private set; }
     public FullName FullName { get; private set; }
+    public Email Email { get; private set; }
     public string Nickname { get; private set; }
     public DateOnly? BirthDate { get; private set; }
     public string? Description { get; private set; }
@@ -24,6 +26,7 @@ public class User : Entity
 
     private User(
         FullName fullName,
+        Email email,
         string nickname,
         DateOnly? birthDate,
         string? description,
@@ -35,10 +38,11 @@ public class User : Entity
         Description = description;
         CreatedDate = createdDate;
     }
-
+    
     public static Result<User> Create(
         string firstName,
         string secondName,
+        string email,
         string nickname,
         DateOnly? birthDate,
         string? description)
@@ -54,9 +58,14 @@ public class User : Entity
         var fullname = FullName.Create(firstName, secondName);
         if (fullname.IsFailure)
             return fullname.Error;
+
+        var mail = ValueObjects.Email.Create(email);
+        if (mail.IsFailure)
+            return mail.Error;
         
         return new User(
             fullname.Value,
+            mail.Value,
             nickname,
             birthDate,
             description,

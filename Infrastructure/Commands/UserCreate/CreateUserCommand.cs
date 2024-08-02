@@ -29,6 +29,7 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
         var user = User.Create(
             request.FirstName,
             request.SecondName,
+            request.Email,
             request.Nickname,
             birth,
             request.Description);

@@ -7,6 +7,7 @@ public class UserReadModel
     public Guid Id { get; init; }
     public string FirstName { get; init; } = string.Empty;
     public string SecondName { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
     public string Nickname { get; init; } = string.Empty;
     public DateOnly? BirthDate { get; init; }
     public string? Description { get; init; } = string.Empty;
