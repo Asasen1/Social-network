@@ -18,6 +18,7 @@ public static class DependencyRegistration
         services.AddProviders();
         services.AddCommandsAndQueries();
         services.AddDataStorages(configuration);
+        services.ConfigureOptions(configuration);
         return services;
     }
 
@@ -46,6 +47,12 @@ public static class DependencyRegistration
             options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
             options.WithSSL(false);
         });
+        return services;
+    }
+    private static IServiceCollection ConfigureOptions(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
         return services;
     }
 }

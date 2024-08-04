@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Common.Models;
 using Domain.Constants;
+using Domain.Constraints;
 using Domain.ValueObjects;
 
 namespace Domain.Entities;
@@ -33,12 +34,12 @@ public class Post : Entity
         if (text.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(text));
         
-        if (header.Length > PostConstants.MAX_HEADER_LENGTH ||
-            header.Length < PostConstants.MIN_HEADER_LENGTH)
+        if (header.Length > PostConstraints.MAX_HEADER_LENGTH ||
+            header.Length < PostConstraints.MIN_HEADER_LENGTH)
             return Errors.General.InvalidLength(nameof(header));
         
-        if (text.Length > PostConstants.MAX_TEXT_LENGTH ||
-            text.Length < PostConstants.MIN_TEXT_LENGTH)
+        if (text.Length > PostConstraints.MAX_TEXT_LENGTH ||
+            text.Length < PostConstraints.MIN_TEXT_LENGTH)
             return Errors.General.ValueIsInvalid(nameof(text));
         
         return new Post(header, text);

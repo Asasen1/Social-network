@@ -26,10 +26,15 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
         if (!isParse)
             return Errors.General.ValueIsInvalid(nameof(request.BirthDate));
         
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        if (passwordHash is null)
+            return Errors.General.Iternal("password");
+        
         var user = User.Create(
+            request.Email,
+            passwordHash,
             request.FirstName,
             request.SecondName,
-            request.Email,
             request.Nickname,
             birth,
             request.Description);

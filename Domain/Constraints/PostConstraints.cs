@@ -1,6 +1,6 @@
-﻿namespace Domain.Constants;
+﻿namespace Domain.Constraints;
 
-public static class PostConstants
+public static class PostConstraints
 {
     public const int MAX_HEADER_LENGTH = 20;
     public const int MIN_HEADER_LENGTH = 1;

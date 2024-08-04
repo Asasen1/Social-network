@@ -1,4 +1,5 @@
 ﻿using Domain.Constants;
+using Domain.Constraints;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,17 +17,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             b.Property(f => f.FirstName)
                 .HasColumnName("first_name")
                 .IsRequired()
-                .HasMaxLength(UserConstants.MAX_LENGTH_NAME);
+                .HasMaxLength(UserConstraints.MAX_LENGTH_NAME);
             b.Property(f => f.SecondName)
                 .HasColumnName("second_name")
                 .IsRequired()
-                .HasMaxLength(UserConstants.MAX_LENGTH_NAME);
+                .HasMaxLength(UserConstraints.MAX_LENGTH_NAME);
         });
         builder.ComplexProperty(u => u.Email, e =>
         {
             e.Property(v => v.Value)
                 .IsRequired()
-                .HasMaxLength(UserConstants.MAX_LENGTH_NAME)
+                .HasMaxLength(UserConstraints.MAX_LENGTH_NAME)
                 .HasColumnName("email");
         });
         builder.Property(u => u.Nickname).IsRequired().HasColumnName("nickname");

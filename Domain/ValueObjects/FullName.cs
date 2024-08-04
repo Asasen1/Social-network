@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Common.Models;
 using Domain.Constants;
+using Domain.Constraints;
 
 namespace Domain.ValueObjects;
 
@@ -26,11 +27,11 @@ public class FullName : ValueObject
             return Errors.General.ValueIsRequired(nameof(firstName));
         if (secondName.IsEmpty())
             return Errors.General.ValueIsRequired(nameof(secondName));
-        if (firstName.Length < UserConstants.MIN_LENGTH_NAME ||
-            firstName.Length > UserConstants.MAX_LENGTH_NAME)
+        if (firstName.Length < UserConstraints.MIN_LENGTH_NAME ||
+            firstName.Length > UserConstraints.MAX_LENGTH_NAME)
             return Errors.General.InvalidLength(nameof(firstName));
-        if (secondName.Length < UserConstants.MIN_LENGTH_NAME ||
-            secondName.Length > UserConstants.MAX_LENGTH_NAME)
+        if (secondName.Length < UserConstraints.MIN_LENGTH_NAME ||
+            secondName.Length > UserConstraints.MAX_LENGTH_NAME)
             return Errors.General.InvalidLength(nameof(secondName));
         return new FullName(firstName, secondName);
     }

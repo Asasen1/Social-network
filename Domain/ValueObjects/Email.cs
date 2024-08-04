@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Domain.Common;
 using Domain.Common.Models;
+using Domain.Constraints;
 
 namespace Domain.ValueObjects;
 
@@ -17,7 +18,7 @@ public class Email : ValueObject
     {
         input = input.Trim();
 
-        if (input.Length is < 1 or > Constraints.SHORT_TITLE_LENGTH)
+        if (input.Length is < 1 or > Constraints.UserConstraints.MAX_LENGTH_NAME)
             return Errors.General.InvalidLength("email");
 
         if (Regex.IsMatch(input, "^(.+)@(.+)$") == false)

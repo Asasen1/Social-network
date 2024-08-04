@@ -1,16 +1,20 @@
-﻿namespace Domain.Common;
+﻿using System.Security.Claims;
+
+namespace Domain.Common;
 
 public static class Permissions
 {
-    public static class User
+    public static class UserPost
     {
         public const string Read = "posts.read";
-        public const string Create = "posts.create";
-        public const string Update = "posts.update";
-        public const string Delete = "posts.delete";
+        public const string Create = "myposts.create";
+        public const string Update = "myposts.update";
+        public const string Delete = "myposts.delete";
     }
-    public static class Admin
+
+    public static class Post
     {
-        
+        public const string Read = "posts.read";
+        public const string Delete = "posts.delete";
     }
 }
