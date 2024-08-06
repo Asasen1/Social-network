@@ -3,12 +3,14 @@ using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
 using Infrastructure.Queries.GetUserById;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 public class UserController : ApplicationController
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateUserCommand command,
@@ -24,7 +26,7 @@ public class UserController : ApplicationController
     [HttpGet]
     public async Task<IActionResult> GetById(
         [FromServices] GetUserByIdQuery query,
-        GetUserByIdRequest request,
+        [FromQuery]GetUserByIdRequest request,
         CancellationToken ct)
     {
         var idResult = await query.Handle(request, ct);

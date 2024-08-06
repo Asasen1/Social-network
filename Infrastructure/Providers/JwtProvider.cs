@@ -24,7 +24,7 @@ public class JwtProvider : IJwtProvider
     {
         var jwtHandler = new JsonWebTokenHandler();
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
-        var permissionClaims = user.Role.Permissons
+        var permissionClaims = user.Role.Permissions
             .Select(p => new Claim(AuthenticationConstants.Permissions, p));
         var claims = permissionClaims.Concat([
             new Claim(AuthenticationConstants.UserId, user.Id.ToString()),

@@ -66,7 +66,7 @@ public class User : Entity
         if (fullname.IsFailure)
             return fullname.Error;
 
-        var mail = ValueObjects.Email.Create(email);
+        var mail = Email.Create(email);
         if (mail.IsFailure)
             return mail.Error;
         

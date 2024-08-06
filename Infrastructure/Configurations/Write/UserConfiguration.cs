@@ -31,6 +31,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("email");
         });
         builder.Property(u => u.Nickname).IsRequired().HasColumnName("nickname");
+        builder.ComplexProperty(u => u.Email, e =>
+        {
+            e.Property(email => email.Value).IsRequired().HasColumnName("email");
+        });
+        builder.Property(u => u.PasswordHash).IsRequired().HasColumnName("password_hash");
+        builder.ComplexProperty(u => u.Role, r =>
+        {
+            r.Property(n => n.Name).IsRequired().HasColumnName("role");
+            r.Property(p => p.Permissions).IsRequired().HasColumnName("permissions");
+        });
         builder.Property(u => u.BirthDate).IsRequired(false).HasColumnName("birth_date");
         builder.Property(u => u.Description).IsRequired(false).HasColumnName("description");
         builder.Property(u => u.CreatedDate).IsRequired().HasColumnName("created_date");
