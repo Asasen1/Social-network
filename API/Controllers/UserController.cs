@@ -30,7 +30,7 @@ public class UserController : ApplicationController
         [FromForm] LoginRequest request,
         CancellationToken ct)
     {
-        var idResult = await handler.Handle(request, ct);
+        var idResult = await handler.Handle(HttpContext, request, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);

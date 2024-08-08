@@ -11,7 +11,8 @@ public static class ApiExtensions
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer((options) =>
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
@@ -23,7 +24,16 @@ public static class ApiExtensions
                             Encoding.UTF8.GetBytes(
                                 configuration.GetSection("Jwt:SecretKey").Get<string>()
                                 ?? throw new AuthenticationException()))
-                });
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["yummy-cookies"];
+                        return Task.CompletedTask;
+                    }
+                };
+            });
         services.AddSwaggerGen(options =>
         {
             options.AddSecurityDefinition("Bearer", new()
