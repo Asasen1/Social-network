@@ -1,7 +1,9 @@
-﻿using Application.Providers;
+﻿using Application.Features;
+using Application.Providers;
 using Infrastructure.DbContexts;
 using Infrastructure.Options;
 using Infrastructure.Providers;
+using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
@@ -15,6 +17,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<WriteDbContext>();
         services.AddScoped<ReadDbContext>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddProviders();
         services.AddCommandsAndQueries();
         services.AddDataStorages(configuration);
@@ -34,6 +37,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
     private static IServiceCollection AddDataStorages(this IServiceCollection services, IConfiguration configuration)

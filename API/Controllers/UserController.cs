@@ -1,4 +1,5 @@
-﻿using Infrastructure.Commands.AddFriend;
+﻿using Application.Features.Login;
+using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
@@ -10,7 +11,7 @@ namespace API.Controllers;
 
 public class UserController : ApplicationController
 {
-    [Authorize]
+    
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateUserCommand command,
@@ -22,7 +23,20 @@ public class UserController : ApplicationController
             return BadRequest(idResult.Error);
         return Ok();
     }
+    
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(
+        [FromServices] LoginHandler handler,
+        [FromForm] LoginRequest request,
+        CancellationToken ct)
+    {
+        var idResult = await handler.Handle(request, ct);
+        if (idResult.IsFailure)
+            return BadRequest(idResult.Error);
+        return Ok(idResult.Value);
+    }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetById(
         [FromServices] GetUserByIdQuery query,

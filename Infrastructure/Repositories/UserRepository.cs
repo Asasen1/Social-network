@@ -1,11 +1,12 @@
-﻿using Domain.Common;
+﻿using Application.Features;
+using Domain.Common;
 using Domain.Entities;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository
+public class UserRepository : IUserRepository
 {
     private readonly WriteDbContext _dbContext;
 

@@ -25,7 +25,7 @@ public class JwtProvider : IJwtProvider
         var jwtHandler = new JsonWebTokenHandler();
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
         var permissionClaims = user.Role.Permissions
-            .Select(p => new Claim(AuthenticationConstants.Permissions, p));
+            .Select(p => new Claim(AuthenticationConstants.Permission, p));
         var claims = permissionClaims.Concat([
             new Claim(AuthenticationConstants.UserId, user.Id.ToString()),
             new Claim(AuthenticationConstants.Role, user.Role.Name)
@@ -33,8 +33,6 @@ public class JwtProvider : IJwtProvider
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new(claims),
-            Issuer = _options.Issuer,
-            Audience = _options.Audience,
             SigningCredentials = new(symmetricSecurityKey, SecurityAlgorithms.HmacSha256),
             Expires = DateTime.UtcNow.AddHours(_options.Expires)
         };

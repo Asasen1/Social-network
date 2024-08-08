@@ -102,5 +102,9 @@ public static class Errors
         {
             return new("invalid.file.length", $"This {length}: file length is invalid");
         }
+        public static Error InvalidCredentials()
+        {
+            return new("users.invalid.credentials", "User's credentials is invalid");
+        }
     }
 }
