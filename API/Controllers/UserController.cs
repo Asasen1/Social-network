@@ -1,4 +1,7 @@
-﻿using Application.Features.Login;
+﻿using API.Attributes;
+using Application.Features.Login;
+using Domain.Common;
+using Domain.ValueObjects;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
@@ -36,7 +39,7 @@ public class UserController : ApplicationController
         return Ok(idResult.Value);
     }
 
-    [Authorize]
+    [HasPermission(Permissions.UserPost.Create)]
     [HttpGet]
     public async Task<IActionResult> GetById(
         [FromServices] GetUserByIdQuery query,

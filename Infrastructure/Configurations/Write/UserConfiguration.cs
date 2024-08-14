@@ -30,7 +30,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasMaxLength(UserConstraints.MAX_LENGTH_NAME)
                 .HasColumnName("email");
         });
-        builder.Property(u => u.Nickname).IsRequired().HasColumnName("nickname");
+        builder.Property(u => u.Nickname).IsRequired();
         builder.ComplexProperty(u => u.Email, e =>
         {
             e.Property(email => email.Value).IsRequired().HasColumnName("email");

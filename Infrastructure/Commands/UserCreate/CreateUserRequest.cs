@@ -6,5 +6,5 @@ public record CreateUserRequest(
     string FirstName,
     string SecondName,
     string Nickname,
-    string BirthDate,
+    string? BirthDate,
     string? Description);

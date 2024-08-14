@@ -21,10 +21,15 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
             .FirstOrDefaultAsync(u => u.Nickname == request.Nickname, cancellationToken: ct);
         if (nickname != null)
             return Errors.UserErrors.NotUnique(nameof(request.Nickname));
-        
-        var isParse = DateOnly.TryParse(request.BirthDate, out var birth);
-        if (!isParse)
-            return Errors.General.ValueIsInvalid(nameof(request.BirthDate));
+
+        var birthDay = new DateOnly();
+        if (request.BirthDate is not null)
+        {
+            var isParse = DateOnly.TryParse(request.BirthDate, out var birth);
+            if (!isParse)
+                return Errors.General.ValueIsInvalid(nameof(request.BirthDate));
+            birthDay = birth;
+        }
         
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         if (passwordHash is null)
@@ -36,7 +41,7 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
             request.FirstName,
             request.SecondName,
             request.Nickname,
-            birth,
+            birthDay,
             request.Description);
         
         if (user.IsFailure)
