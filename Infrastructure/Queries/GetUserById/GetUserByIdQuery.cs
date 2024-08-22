@@ -12,7 +12,6 @@ public class GetUserByIdQuery(ReadDbContext dbContext) :
 {
     public async Task<Result<GetUserByIdResponse>> Handle(GetUserByIdRequest request, CancellationToken ct)
     {
-        //test
         var user = await dbContext.Users
             .Include(u => u.Photos)
             .FirstOrDefaultAsync(u => u.Id == request.Id, ct);
