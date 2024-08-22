@@ -1,10 +1,12 @@
 ﻿using API.Attributes;
 using Application.Features.Login;
+using Application.Providers;
 using Domain.Common;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
+using Infrastructure.Providers;
 using Infrastructure.Queries.GetUserById;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,6 +83,14 @@ public class UserController : ApplicationController
         var result = await command.Handle(request, ct);
         if (result.IsFailure)
             return BadRequest(result.Error);
+        return Ok();
+    }
+
+    [HttpPost("test")]
+    public IActionResult Test([FromForm] string accessToken,
+        [FromServices] IJwtProvider provider)
+    {
+        provider.GetPrincipalFromExpiredToken(accessToken);
         return Ok();
     }
 }

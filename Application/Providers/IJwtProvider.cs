@@ -1,11 +1,16 @@
-﻿using Domain.Agregates;
+﻿using System.Security.Claims;
+using Application.DTO;
+using Domain.Agregates;
 using Domain.Common;
-using Domain.Entities;
+using Domain.ValueObjects;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Providers;
 
 public interface IJwtProvider
 {
     Result<string> GenerateAccessToken(User user);
-    public Result<string> GenerateRefreshToken();
+    public Result<RefreshToken> GenerateRefreshToken();
+    public Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken);
+    public Task<Result<TokenDto>> Refresh(HttpContext context, TokenDto tokenDto, CancellationToken ct);
 }

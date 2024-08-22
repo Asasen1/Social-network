@@ -1,14 +1,17 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Application.DataAccess;
+using Application.DTO;
+using Application.Features;
 using Application.Providers;
 using Domain.Agregates;
 using Domain.Common;
 using Domain.Constants;
-using Domain.Entities;
 using Domain.ValueObjects;
-using Infrastructure.DbContexts;
 using Infrastructure.Options;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -17,9 +20,15 @@ namespace Infrastructure.Providers;
 
 public class JwtProvider : IJwtProvider
 {
+    private readonly IUserRepository _repository;
+    private readonly ITransaction _transaction;
     private readonly JwtOptions _options;
-    public JwtProvider(IOptions<JwtOptions> options)
+    public JwtProvider(IOptions<JwtOptions> options,
+        IUserRepository repository,
+        ITransaction transaction)
     {
+        _repository = repository;
+        _transaction = transaction;
         _options = options.Value;
     }
     public Result<string> GenerateAccessToken(User user)
@@ -42,16 +51,67 @@ public class JwtProvider : IJwtProvider
         return token;
     }
 
-    public Result<string> GenerateRefreshToken()
+    public Result<RefreshToken> GenerateRefreshToken()
     {
         var randomNumbers = new byte[32];
         using var randomGenerator = RandomNumberGenerator.Create();
         randomGenerator.GetBytes(randomNumbers);
-        return Convert.ToBase64String(randomNumbers);
+        return RefreshToken.Create(Convert.ToBase64String(randomNumbers), DateTime.UtcNow.AddDays(
+            _options.ExpiresRefresh)) ;
     }
 
-    public Result GetPrincipalFromExpiredToken()
+    public Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken)
     {
-        return Result.Success();
+        if (accessToken.IsEmpty())
+            return Errors.General.ValueIsRequired();
+        
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey))
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var claimsPrincipal = tokenHandler.ValidateToken(accessToken, tokenValidationParameters, out var securityToken);
+        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+            throw new SecurityTokenException();
+        return claimsPrincipal;
     }
+
+    public async Task<Result<TokenDto>> Refresh(HttpContext context,
+        TokenDto tokenDto,
+        CancellationToken ct)
+    {
+        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+        if (principal.IsFailure)
+            return principal.Error;
+        
+        var userId = principal.Value.Identity?.Name;
+        var userResult = await _repository.GetById(Guid.Parse(userId ?? string.Empty), ct);
+        if (userResult.IsFailure)
+            return userResult.Error;
+        var user = userResult.Value;
+        
+        if (user.RefreshToken.Token != tokenDto.RefreshToken ||
+            user.RefreshToken.Expires <= DateTime.UtcNow)
+            return Errors.General.TokenSmell("Expiration time is failure or invalid token");
+        
+        var accessToken = GenerateAccessToken(user).Value;
+        var refreshToken = GenerateRefreshToken().Value;
+        user.UpdateRefresh(refreshToken);
+        context.Response.Cookies.Append("yummy-cookies", accessToken,
+            new CookieOptions
+            {
+                Expires = new DateTimeOffset(DateTime.UtcNow.AddHours(_options.ExpiresAccess)),
+                HttpOnly = true,
+                Secure = true,
+            });
+        
+        await _transaction.SaveChangesAsync(ct);
+        return new TokenDto(accessToken, refreshToken.Token);
+    }
+
 }

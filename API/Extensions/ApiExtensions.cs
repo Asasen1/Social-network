@@ -53,7 +53,7 @@ public static class ApiExtensions
                     {
                         var errorInfo = new ErrorInfo(Errors.General.Forbidden("User has not permission."));
                         var envelope = Envelope.Error([errorInfo]);
-                    
+                        
                         context.Response.ContentType = "application/json";
                         context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                         await context.Response.WriteAsJsonAsync(envelope);

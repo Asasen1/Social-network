@@ -38,21 +38,18 @@ public class LoginHandler
 
         var accessToken = _jwtProvider.GenerateAccessToken(user).Value;
         var refreshToken = _jwtProvider.GenerateRefreshToken().Value;
-        //TODO вынести
-        var refresh = RefreshToken.Create(refreshToken,
-            DateTime.UtcNow.AddDays(int.Parse(_configuration["Jwt:ExpiresRefresh"] ?? string.Empty))).Value;
 
-        user.UpdateRefresh(refresh);
+        user.UpdateRefresh(refreshToken);
         await _transaction.SaveChangesAsync(ct);
 
         context.Response.Cookies.Append("yummy-cookies", accessToken,
             new CookieOptions
             {
-                Expires = new DateTimeOffset(DateTime.UtcNow.AddSeconds(24)),
+                Expires = new DateTimeOffset(DateTime.UtcNow.AddHours(24)),
                 HttpOnly = true,
                 Secure = true,
             });
 
-        return new LoginResponse(accessToken, refreshToken, user.Role.Name);
+        return new LoginResponse(accessToken, refreshToken.Token, user.Role.Name);
     }
 }
