@@ -1,4 +1,5 @@
-﻿using Application.Features;
+﻿using Application.DataAccess;
+using Application.Features;
 using Application.Providers;
 using Infrastructure.DbContexts;
 using Infrastructure.Options;
@@ -22,6 +23,7 @@ public static class DependencyRegistration
         services.AddCommandsAndQueries();
         services.AddDataStorages(configuration);
         services.ConfigureOptions(configuration);
+        services.AddRepositories();
         return services;
     }
 
@@ -38,6 +40,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<ITransaction, Transaction>();
         return services;
     }
     private static IServiceCollection AddDataStorages(this IServiceCollection services, IConfiguration configuration)
@@ -57,6 +60,12 @@ public static class DependencyRegistration
         this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
+        return services;
+    }
+    private static IServiceCollection AddRepositories(
+        this IServiceCollection services)
+    { 
+        services.AddTransient<IUserRepository, UserRepository>();
         return services;
     }
 }

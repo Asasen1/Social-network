@@ -1,4 +1,5 @@
-﻿using Domain.Constants;
+﻿using Domain.Agregates;
+using Domain.Constants;
 using Domain.Constraints;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         {
             r.Property(n => n.Name).IsRequired().HasColumnName("role");
             r.Property(p => p.Permissions).IsRequired().HasColumnName("permissions");
+        });
+        builder.ComplexProperty(u => u.RefreshToken, r =>
+        {
+            r.Property(b => b.Token)
+                .HasColumnName("refresh_token");
+            r.Property(b => b.Expires)
+                .HasColumnName("expires_token");
         });
         builder.Property(u => u.BirthDate).IsRequired(false).HasColumnName("birth_date");
         builder.Property(u => u.Description).IsRequired(false).HasColumnName("description");

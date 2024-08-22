@@ -1,6 +1,9 @@
-﻿using System.Security.Authentication;
+﻿using System.Net;
+using System.Security.Authentication;
 using System.Text;
 using API.Authorization;
+using API.Contracts;
+using Domain.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +38,25 @@ public static class ApiExtensions
                     {
                         context.Token = context.Request.Cookies["yummy-cookies"];
                         return Task.CompletedTask;
+                    },
+                    OnChallenge = async context =>
+                    {
+                        context.HandleResponse();
+                        var errorInfo = new ErrorInfo(Errors.General.UnAuthorized("User unauthorized."));
+                        var envelope = Envelope.Error([errorInfo]);
+                    
+                        context.Response.ContentType = "application/json";
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        await context.Response.WriteAsJsonAsync(envelope);
+                    },
+                    OnForbidden = async context =>
+                    {
+                        var errorInfo = new ErrorInfo(Errors.General.Forbidden("User has not permission."));
+                        var envelope = Envelope.Error([errorInfo]);
+                    
+                        context.Response.ContentType = "application/json";
+                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        await context.Response.WriteAsJsonAsync(envelope);
                     }
                 };
             });

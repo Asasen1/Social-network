@@ -10,6 +10,7 @@ public class UserReadModel
     public string Email { get; init; } = string.Empty;
     public string PasswordHash { get; init; } = string.Empty;
     public string Role { get; init; } = string.Empty;
+    public string RefreshToken { get; init; } = string.Empty;
     public string Nickname { get; init; } = string.Empty;
     public DateOnly? BirthDate { get; init; }
     public string? Description { get; init; } = string.Empty;

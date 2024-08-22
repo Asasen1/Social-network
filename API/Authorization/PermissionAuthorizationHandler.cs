@@ -1,14 +1,13 @@
 ﻿using API.Attributes;
 using Domain.Constants;
+using Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.VisualBasic;
 
 namespace API.Authorization;
 
 public class PermissionAuthorizationHandler : AuthorizationHandler<HasPermissionAttribute>
 {
     private readonly ILogger<PermissionAuthorizationHandler> _logger;
-
     public PermissionAuthorizationHandler(ILogger<PermissionAuthorizationHandler> logger)
     {
         _logger = logger;
@@ -19,7 +18,6 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<HasPermission
         var permissions = context.User.Claims
             .Where(c => c.Type == AuthenticationConstants.Permission)
             .Select(p => p.Value);
-
         if (!permissions.Contains(requirement.Permission))
         {
             _logger.LogError("User has not permission: {permission}", requirement.Permission);

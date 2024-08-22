@@ -1,14 +1,16 @@
 ﻿using Domain.Common;
 using Domain.Common.Models;
+using Domain.Entities;
 using Domain.ValueObjects;
 
-namespace Domain.Entities;
+namespace Domain.Agregates;
 
 public class User : Entity
 {
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
     public Role Role { get; private set; }
+    public RefreshToken RefreshToken { get; private set; }
     
     public FullName FullName { get; private set; }
     public string Nickname { get; private set; }
@@ -29,6 +31,7 @@ public class User : Entity
     private User(
         Email email,
         string passwordHash,
+        RefreshToken token,
         FullName fullName,
         string nickname,
         DateOnly? birthDate,
@@ -38,6 +41,7 @@ public class User : Entity
         Email = email;
         PasswordHash = passwordHash;
         Role = Role.User;
+        RefreshToken = token;
         FullName = fullName;
         Nickname = nickname;
         BirthDate = birthDate;
@@ -46,34 +50,20 @@ public class User : Entity
     }
     
     public static Result<User> Create(
-        string email,
+        Email email,
         string passwordHash,
-        string firstName,
-        string secondName,
+        FullName fullName,
         string nickname,
         DateOnly? birthDate,
         string? description)
     {
-        firstName = firstName.Trim();
-        secondName = secondName.Trim();
-        
-        if (firstName.IsEmpty())
-            return Errors.General.ValueIsRequired(nameof(firstName));
-        if (secondName.IsEmpty())
-            return Errors.General.ValueIsRequired(nameof(secondName));
-        
-        var fullname = FullName.Create(firstName, secondName);
-        if (fullname.IsFailure)
-            return fullname.Error;
-
-        var mail = Email.Create(email);
-        if (mail.IsFailure)
-            return mail.Error;
+        var token = RefreshToken.Create(string.Empty, DateTime.MinValue).Value;
         
         return new User(
-            mail.Value,
+            email,
             passwordHash,
-            fullname.Value,
+            token,
+            fullName,
             nickname,
             birthDate,
             description,
@@ -104,5 +94,11 @@ public class User : Entity
     {
         _photos.Remove(photo);
         return _photos;
+    }
+
+    public Result<RefreshToken> UpdateRefresh(RefreshToken token)
+    {
+        RefreshToken = token;
+        return token;
     }
 }

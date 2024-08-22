@@ -21,16 +21,18 @@ public class DeletePhotoCommand : ICommandHandler<DeletePhotoRequest>
     {
         var user = await _dbContext.Users.Include(user => user.Photos)
             .FirstOrDefaultAsync(u => u.Id == request.Id, ct);
+        if (user == null)
+            return Errors.General.NotFound();
         
         var result = await _provider.RemovePhoto(request.Path, ct);
         if (result.IsFailure)
             return result.Error;
         
-        var userPhoto = user?.Photos.FirstOrDefault(p => p.Path == request.Path);
+        var userPhoto = user.Photos.FirstOrDefault(p => p.Path == request.Path);
         if (userPhoto == null)
             return Errors.General.RemoveFailure(request.Path);
         
-        user?.RemovePhoto(userPhoto);
+        user.RemovePhoto(userPhoto);
         await _dbContext.SaveChangesAsync(ct);
 
         return Result.Success();

@@ -1,29 +1,26 @@
 ﻿using API.Attributes;
 using Application.Features.Login;
 using Domain.Common;
-using Domain.ValueObjects;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
 using Infrastructure.Queries.GetUserById;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 public class UserController : ApplicationController
 {
-    
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateUserCommand command,
         [FromForm] CreateUserRequest request,
         CancellationToken ct)
     {
-        var idResult = await command.Handle(request, ct);
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
+        var result = await command.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
         return Ok();
     }
     
@@ -33,23 +30,23 @@ public class UserController : ApplicationController
         [FromForm] LoginRequest request,
         CancellationToken ct)
     {
-        var idResult = await handler.Handle(HttpContext, request, ct);
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-        return Ok(idResult.Value);
+        var result = await handler.Handle(HttpContext, request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
     }
 
-    [HasPermission(Permissions.UserPost.Create)]
+    [HasPermission(Permissions.Post.Delete)]
     [HttpGet]
     public async Task<IActionResult> GetById(
         [FromServices] GetUserByIdQuery query,
         [FromQuery]GetUserByIdRequest request,
         CancellationToken ct)
     {
-        var idResult = await query.Handle(request, ct);
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-        return Ok(idResult.Value);
+        var result = await query.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
     }
 
     [HttpPost("friend")]
@@ -58,9 +55,9 @@ public class UserController : ApplicationController
         AddFriendRequest request,
         CancellationToken ct)
     {
-        var idResult = await command.Handle(request, ct);
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
+        var result = await command.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
         return Ok();
     }
 
@@ -70,9 +67,9 @@ public class UserController : ApplicationController
         [FromForm] UploadPhotoRequest request,
         CancellationToken ct)
     {
-        var idResult = await command.Handle(request, ct);
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
+        var result = await command.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
         return Ok();
     }
     [HttpDelete("photo")]
@@ -81,9 +78,9 @@ public class UserController : ApplicationController
         [FromForm] DeletePhotoRequest request,
         CancellationToken ct)
     {
-        var idResult = await command.Handle(request, ct);
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
+        var result = await command.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
         return Ok();
     }
 }

@@ -3,6 +3,8 @@ using API.Middlewares;
 using API.Validation;
 using Application;
 using Infrastructure;
+using Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +29,9 @@ var app = builder.Build();
 //
 //     await dbContext.Database.MigrateAsync();
 // }
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

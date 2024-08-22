@@ -5,8 +5,8 @@ namespace Domain.ValueObjects;
 
 public class Role : ValueObject
 {
-    public string Name { get; private set; }
-    public string[] Permissions { get; set; }
+    public string Name { get; }
+    public string[] Permissions { get; }
 
     private Role(string name, string[] permissions)
     {
@@ -14,23 +14,29 @@ public class Role : ValueObject
         Permissions = permissions;
     }
 
-    public static readonly Role Admin = new("ADMIN",
+    public static readonly Role Admin = new(nameof(Admin).ToUpper(),
         [
-            Common.Permissions.Post.Read,
+            Common.Permissions.Post.Update,
             Common.Permissions.Post.Delete,
-
-            Common.Permissions.UserPost.Update,
-            Common.Permissions.UserPost.Delete,
-            Common.Permissions.UserPost.Create,
-            Common.Permissions.UserPost.Read
+            Common.Permissions.Post.Create,
+            Common.Permissions.Post.Read,
+            
+            Common.Permissions.User.Update,
+            Common.Permissions.User.Delete,
+            Common.Permissions.User.Create,
+            Common.Permissions.User.Read
         ]
     );
-    public static readonly Role User = new("USER",
+    public static readonly Role User = new(nameof(User).ToUpper(),
         [
-            Common.Permissions.UserPost.Update,
-            Common.Permissions.UserPost.Delete,
-            Common.Permissions.UserPost.Create,
-            Common.Permissions.UserPost.Read
+            Common.Permissions.Post.Update,
+            Common.Permissions.Post.Create,
+            Common.Permissions.Post.Read,
+            
+            Common.Permissions.User.Update,
+            Common.Permissions.User.Delete,
+            Common.Permissions.User.Create,
+            Common.Permissions.User.Read
         ]
     );
     protected override IEnumerable<object> GetEqualityComponents()

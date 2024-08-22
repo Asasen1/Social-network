@@ -1,4 +1,5 @@
 ﻿using Application.Features;
+using Domain.Agregates;
 using Domain.Common;
 using Domain.Entities;
 using Infrastructure.DbContexts;
@@ -18,6 +19,13 @@ public class UserRepository : IUserRepository
     public async Task<Result<User>> GetByEmail(string email, CancellationToken ct)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email.Value == email, cancellationToken: ct);
+        if (user is null)
+            return Errors.General.NotFound();
+        return user;
+    }
+    public async Task<Result<User>> GetById(Guid id, CancellationToken ct)
+    {
+        var user = await _dbContext.Users.FindAsync(new object?[] { id }, cancellationToken: ct);
         if (user is null)
             return Errors.General.NotFound();
         return user;

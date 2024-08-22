@@ -1,6 +1,8 @@
 ﻿using Application.Abstractions;
+using Domain.Agregates;
 using Domain.Common;
 using Domain.Entities;
+using Domain.ValueObjects;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +19,13 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
 
     public async Task<Result> Handle(CreateUserRequest request, CancellationToken ct)
     {
-        var nickname =await _writeDbContext.Users
-            .FirstOrDefaultAsync(u => u.Nickname == request.Nickname, cancellationToken: ct);
-        if (nickname != null)
-            return Errors.UserErrors.NotUnique(nameof(request.Nickname));
+        var validateUser = await _writeDbContext.Users
+            .Where(u => u.Email.Value == request.Email
+            && u.Nickname == request.Nickname)
+            .ToListAsync(cancellationToken: ct);
+            
+        if (validateUser.Count != 0)
+            return Errors.UserErrors.NotUnique("email or nickname");
 
         var birthDay = new DateOnly();
         if (request.BirthDate is not null)
@@ -30,23 +35,30 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
                 return Errors.General.ValueIsInvalid(nameof(request.BirthDate));
             birthDay = birth;
         }
+
+        var fullname = FullName.Create(request.FirstName, request.SecondName);
+        if (fullname.IsFailure)
+            return fullname.Error;
+
+        var mail = Email.Create(request.Email);
+        if (mail.IsFailure)
+            return mail.Error;
         
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         if (passwordHash is null)
             return Errors.General.Iternal("password");
-        
+
         var user = User.Create(
-            request.Email,
+            mail.Value,
             passwordHash,
-            request.FirstName,
-            request.SecondName,
+            fullname.Value,
             request.Nickname,
             birthDay,
             request.Description);
-        
+
         if (user.IsFailure)
             return user.Error;
-        
+
         await _writeDbContext.Users.AddAsync(user.Value, ct);
         await _writeDbContext.SaveChangesAsync(ct);
         return Result.Success();

@@ -36,10 +36,16 @@ public static class Errors
     public static class General
     {
         public static Error Iternal(string message)
-            => new("iternal", message);
+            => new("iternal", message); 
+        public static Error UnAuthorized(string message)
+            => new("user.unauthorized", message); 
+        public static Error Forbidden(string message)
+            => new("user.forbidden", message); 
+        public static Error TokenSmell(string message)
+            => new("token.smell", message);
 
         public static Error Unexpected()
-            => new("unexpecret", "unexpecret");
+            => new("unexpect", "unexpect");
 
         public static Error NotFound(Guid? id = null)
         {

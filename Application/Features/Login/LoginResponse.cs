@@ -1,3 +1,3 @@
 ﻿namespace Application.Features.Login;
 
-public record LoginResponse(string Token, string Role);
+public record LoginResponse(string AccessToken, string RefershToken, string Role);
