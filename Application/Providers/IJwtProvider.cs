@@ -11,6 +11,5 @@ public interface IJwtProvider
 {
     Result<string> GenerateAccessToken(User user);
     public Result<RefreshToken> GenerateRefreshToken();
-    public Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken);
     public Task<Result<TokenDto>> Refresh(HttpContext context, TokenDto tokenDto, CancellationToken ct);
 }

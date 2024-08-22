@@ -24,6 +24,7 @@ public static class DependencyRegistration
         services.AddDataStorages(configuration);
         services.ConfigureOptions(configuration);
         services.AddRepositories();
+        services.AddScoped<SqlConnectionFactory>();
         return services;
     }
 

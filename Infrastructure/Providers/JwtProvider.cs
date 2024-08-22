@@ -23,6 +23,7 @@ public class JwtProvider : IJwtProvider
     private readonly IUserRepository _repository;
     private readonly ITransaction _transaction;
     private readonly JwtOptions _options;
+
     public JwtProvider(IOptions<JwtOptions> options,
         IUserRepository repository,
         ITransaction transaction)
@@ -31,6 +32,7 @@ public class JwtProvider : IJwtProvider
         _transaction = transaction;
         _options = options.Value;
     }
+
     public Result<string> GenerateAccessToken(User user)
     {
         var jwtHandler = new JsonWebTokenHandler();
@@ -56,15 +58,31 @@ public class JwtProvider : IJwtProvider
         var randomNumbers = new byte[32];
         using var randomGenerator = RandomNumberGenerator.Create();
         randomGenerator.GetBytes(randomNumbers);
-        return RefreshToken.Create(Convert.ToBase64String(randomNumbers), 
-            DateTime.UtcNow.AddDays(_options.ExpiresRefresh)) ;
+        return RefreshToken.Create(Convert.ToBase64String(randomNumbers),
+            DateTime.UtcNow.AddDays(_options.ExpiresRefresh));
     }
 
-    public Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken)
+
+    public async Task<Result<TokenDto>> Refresh(HttpContext context,
+        TokenDto tokenDto,
+        CancellationToken ct)
+    {
+        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+        if (principal.IsFailure)
+            return principal.Error;
+
+        var user = await CheckExpired(principal.Value, tokenDto.RefreshToken, ct);
+        if (user.IsFailure)
+            return user.Error;
+
+        return await UpdateTokens(context, user.Value, ct);
+    }
+
+    private Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken)
     {
         if (accessToken.IsEmpty())
             return Errors.General.ValueIsRequired();
-        
+
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,
@@ -81,29 +99,34 @@ public class JwtProvider : IJwtProvider
         return claimsPrincipal;
     }
 
-    public async Task<Result<TokenDto>> Refresh(HttpContext context,
-        TokenDto tokenDto,
+    private async Task<Result<User>> CheckExpired(
+        ClaimsPrincipal principal,
+        string refreshToken,
         CancellationToken ct)
     {
-        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
-        if (principal.IsFailure)
-            return principal.Error;
-        
-        var userIds = principal.Value.Claims.Where(c => c.Type == AuthenticationConstants.UserId)
+        var userIds = principal.Claims.Where(c => c.Type == AuthenticationConstants.UserId)
             .Select(t => t.Value);
         var userId = userIds.SingleOrDefault();
         var isGuid = Guid.TryParse(userId, out var id);
         if (!isGuid)
             return Errors.General.Iternal("Error with refresh");
+
         var userResult = await _repository.GetById(id, ct);
         if (userResult.IsFailure)
             return userResult.Error;
         var user = userResult.Value;
-        
-        if (user.RefreshToken.Token != tokenDto.RefreshToken ||
+
+        if (user.RefreshToken.Token != refreshToken ||
             user.RefreshToken.Expires <= DateTime.UtcNow)
             return Errors.General.TokenSmell("Expiration time is failure or invalid token");
-        
+        return user;
+    }
+
+    private async Task<Result<TokenDto>> UpdateTokens(
+        HttpContext context,
+        User user,
+        CancellationToken ct)
+    {
         var accessToken = GenerateAccessToken(user).Value;
         var refreshToken = GenerateRefreshToken().Value;
         user.UpdateRefresh(refreshToken);
@@ -114,9 +137,7 @@ public class JwtProvider : IJwtProvider
                 HttpOnly = true,
                 Secure = true,
             });
-        
         await _transaction.SaveChangesAsync(ct);
         return new TokenDto(accessToken, refreshToken.Token);
     }
-
 }

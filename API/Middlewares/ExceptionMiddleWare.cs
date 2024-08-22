@@ -25,6 +25,12 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
+            _logger.LogError(ex.Source);
+            _logger.LogError(ex.HelpLink);
+            _logger.LogError(ex.StackTrace);
+            _logger.LogError(ex.HResult.ToString());
+            _logger.LogError(ex.InnerException?.ToString());
+            _logger.LogError(ex.HResult.ToString());
 
             var errorInfo = new ErrorInfo(Errors.General.Iternal(ex.Message));
             var envelope = Envelope.Error([errorInfo]);
