@@ -1,4 +1,5 @@
 ﻿using API.Attributes;
+using Application.DTO;
 using Application.Features.Login;
 using Application.Providers;
 using Domain.Common;
@@ -25,7 +26,7 @@ public class UserController : ApplicationController
             return BadRequest(result.Error);
         return Ok();
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromServices] LoginHandler handler,
@@ -42,7 +43,7 @@ public class UserController : ApplicationController
     [HttpGet]
     public async Task<IActionResult> GetById(
         [FromServices] GetUserByIdQuery query,
-        [FromQuery]GetUserByIdRequest request,
+        [FromQuery] GetUserByIdRequest request,
         CancellationToken ct)
     {
         var result = await query.Handle(request, ct);
@@ -74,6 +75,7 @@ public class UserController : ApplicationController
             return BadRequest(result.Error);
         return Ok();
     }
+
     [HttpDelete("photo")]
     public async Task<IActionResult> DeletePhoto(
         [FromServices] DeletePhotoCommand command,
@@ -86,11 +88,14 @@ public class UserController : ApplicationController
         return Ok();
     }
 
-    [HttpPost("test")]
-    public IActionResult Test([FromForm] string accessToken,
-        [FromServices] IJwtProvider provider)
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Test([FromForm] TokenDto dto,
+        [FromServices] IJwtProvider provider,
+        CancellationToken ct)
     {
-        provider.GetPrincipalFromExpiredToken(accessToken);
-        return Ok();
+        var result = await provider.Refresh(HttpContext, dto, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
     }
 }

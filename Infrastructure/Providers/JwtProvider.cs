@@ -45,7 +45,7 @@ public class JwtProvider : IJwtProvider
         {
             Subject = new(claims),
             SigningCredentials = new(symmetricSecurityKey, SecurityAlgorithms.HmacSha256),
-            Expires = DateTime.UtcNow.AddSeconds(_options.ExpiresAccess)
+            Expires = DateTime.UtcNow.AddHours(_options.ExpiresAccess)
         };
         var token = jwtHandler.CreateToken(tokenDescriptor);
         return token;
@@ -56,8 +56,8 @@ public class JwtProvider : IJwtProvider
         var randomNumbers = new byte[32];
         using var randomGenerator = RandomNumberGenerator.Create();
         randomGenerator.GetBytes(randomNumbers);
-        return RefreshToken.Create(Convert.ToBase64String(randomNumbers), DateTime.UtcNow.AddDays(
-            _options.ExpiresRefresh)) ;
+        return RefreshToken.Create(Convert.ToBase64String(randomNumbers), 
+            DateTime.UtcNow.AddDays(_options.ExpiresRefresh)) ;
     }
 
     public Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken)
@@ -89,8 +89,13 @@ public class JwtProvider : IJwtProvider
         if (principal.IsFailure)
             return principal.Error;
         
-        var userId = principal.Value.Identity?.Name;
-        var userResult = await _repository.GetById(Guid.Parse(userId ?? string.Empty), ct);
+        var userIds = principal.Value.Claims.Where(c => c.Type == AuthenticationConstants.UserId)
+            .Select(t => t.Value);
+        var userId = userIds.SingleOrDefault();
+        var isGuid = Guid.TryParse(userId, out var id);
+        if (!isGuid)
+            return Errors.General.Iternal("Error with refresh");
+        var userResult = await _repository.GetById(id, ct);
         if (userResult.IsFailure)
             return userResult.Error;
         var user = userResult.Value;
