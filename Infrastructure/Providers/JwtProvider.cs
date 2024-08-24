@@ -47,7 +47,7 @@ public class JwtProvider : IJwtProvider
         {
             Subject = new(claims),
             SigningCredentials = new(symmetricSecurityKey, SecurityAlgorithms.HmacSha256),
-            Expires = DateTime.UtcNow.AddHours(_options.ExpiresAccess)
+            Expires = DateTime.UtcNow.AddSeconds(_options.ExpiresAccess)
         };
         var token = jwtHandler.CreateToken(tokenDescriptor);
         return token;
@@ -64,14 +64,14 @@ public class JwtProvider : IJwtProvider
 
 
     public async Task<Result<TokenDto>> Refresh(HttpContext context,
-        TokenDto tokenDto,
-        CancellationToken ct)
+        string accessToken,
+        CancellationToken ct = default)
     {
-        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+        var principal = GetPrincipalFromExpiredToken(accessToken);
         if (principal.IsFailure)
             return principal.Error;
 
-        var user = await CheckExpired(principal.Value, tokenDto.RefreshToken, ct);
+        var user = await CheckExpired(principal.Value, ct);
         if (user.IsFailure)
             return user.Error;
 
@@ -87,7 +87,7 @@ public class JwtProvider : IJwtProvider
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = true,
+            ValidateLifetime = false,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey))
         };
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -100,9 +100,7 @@ public class JwtProvider : IJwtProvider
     }
 
     private async Task<Result<User>> CheckExpired(
-        ClaimsPrincipal principal,
-        string refreshToken,
-        CancellationToken ct)
+        ClaimsPrincipal principal, CancellationToken ct)
     {
         var userIds = principal.Claims.Where(c => c.Type == AuthenticationConstants.UserId)
             .Select(t => t.Value);
@@ -116,8 +114,7 @@ public class JwtProvider : IJwtProvider
             return userResult.Error;
         var user = userResult.Value;
 
-        if (user.RefreshToken.Token != refreshToken ||
-            user.RefreshToken.Expires <= DateTime.UtcNow)
+        if (user.RefreshToken.Expires <= DateTime.UtcNow)
             return Errors.General.TokenSmell("Expiration time is failure or invalid token");
         return user;
     }

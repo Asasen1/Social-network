@@ -11,5 +11,5 @@ public interface IJwtProvider
 {
     Result<string> GenerateAccessToken(User user);
     public Result<RefreshToken> GenerateRefreshToken();
-    public Task<Result<TokenDto>> Refresh(HttpContext context, TokenDto tokenDto, CancellationToken ct);
+    public Task<Result<TokenDto>> Refresh(HttpContext context, string accessToken, CancellationToken ct = default);
 }

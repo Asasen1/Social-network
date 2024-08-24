@@ -26,12 +26,19 @@ public class ExceptionMiddleware
         {
             _logger.LogError(ex.Message);
             _logger.LogError(ex.Source);
-            _logger.LogError(ex.HelpLink);
             _logger.LogError(ex.StackTrace);
-            _logger.LogError(ex.HResult.ToString());
-            _logger.LogError(ex.InnerException?.ToString());
-            _logger.LogError(ex.HResult.ToString());
 
+            if (ex.Message.StartsWith("IDX10223"))
+            {
+                var errorInfoU = new ErrorInfo(Errors.General.TokenSmell
+                    (ex.Message.Replace("IDX10223", "")));
+                var envelopeU = Envelope.Error([errorInfoU]);
+            
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                await context.Response.WriteAsJsonAsync(envelopeU);
+                return;
+            }
             var errorInfo = new ErrorInfo(Errors.General.Iternal(ex.Message));
             var envelope = Envelope.Error([errorInfo]);
 

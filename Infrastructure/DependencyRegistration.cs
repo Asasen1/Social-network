@@ -24,7 +24,7 @@ public static class DependencyRegistration
         services.AddDataStorages(configuration);
         services.ConfigureOptions(configuration);
         services.AddRepositories();
-        services.AddScoped<SqlConnectionFactory>();
+        services.AddSingleton<SqlConnectionFactory>();
         return services;
     }
 
@@ -34,7 +34,8 @@ public static class DependencyRegistration
             .FromAssemblies(typeof(DependencyRegistration).Assembly)
             .AddClasses(filter => filter.Where(x => x.Name.EndsWith("Command") ||
                                                     x.Name.EndsWith("Query")))
-            .UsingRegistrationStrategy(RegistrationStrategy.Skip));
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+            .AsSelfWithInterfaces().WithScopedLifetime());
         return services;
     }
     private static IServiceCollection AddProviders(this IServiceCollection services)

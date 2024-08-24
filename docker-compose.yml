@@ -1,9 +1,9 @@
 ﻿services:
-#  api:
-#    image: api
-#    build:
-#      context: .
-#      dockerfile: API/Dockerfile
+  #  api:
+  #    image: api
+  #    build:
+  #      context: .
+  #      dockerfile: API/Dockerfile
   postgres:
     container_name: postgres2
     image: postgres
@@ -26,6 +26,15 @@
       - minio_data:/data
     command: server --console-address ":9001" /data
     restart: always
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
 volumes:
   postgres-data:
   minio_data:

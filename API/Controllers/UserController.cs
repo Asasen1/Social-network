@@ -88,14 +88,14 @@ public class UserController : ApplicationController
         return Ok();
     }
 
-    [HttpPost("refresh")]
-    public async Task<IActionResult> Test([FromForm] TokenDto dto,
-        [FromServices] IJwtProvider provider,
-        CancellationToken ct)
-    {
-        var result = await provider.Refresh(HttpContext, dto, ct);
-        if (result.IsFailure)
-            return BadRequest(result.Error);
-        return Ok(result.Value);
-    }
+    // [HttpPost("refresh")]
+    // public async Task<IActionResult> Test([FromForm] TokenDto dto,
+    //     [FromServices] IJwtProvider provider,
+    //     CancellationToken ct)
+    // {
+    //     var result = await provider.Refresh(HttpContext, dto, ct);
+    //     if (result.IsFailure)
+    //         return BadRequest(result.Error);
+    //     return Ok(result.Value);
+    // }
 }

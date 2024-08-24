@@ -1,13 +1,17 @@
 ﻿using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Text;
 using API.Authorization;
 using API.Contracts;
+using Application.Providers;
 using Domain.Common;
+using Infrastructure.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace API.Extensions;
 
@@ -22,10 +26,13 @@ public static class ApiExtensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    LifetimeValidator = (before, expires, token, parameters) =>
+                        expires != null && expires > DateTime.UtcNow,
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+
                     IssuerSigningKey =
                         new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(
@@ -34,6 +41,28 @@ public static class ApiExtensions
                 };
                 options.Events = new JwtBearerEvents
                 {
+                    // OnAuthenticationFailed = async context =>
+                    // {
+                    //     var jwtProvider =
+                    //         context.HttpContext.RequestServices.GetRequiredService<IJwtProvider>();
+                    //     var result = await jwtProvider.Refresh(context.HttpContext,
+                    //         context.HttpContext.Request.Cookies["yummy-cookies"]);
+                    //     context.Options.TokenValidationParameters = new TokenValidationParameters
+                    //     {
+                    //         LifetimeValidator = (before, expires, token, parameters) =>
+                    //             expires != null && expires > DateTime.UtcNow,
+                    //         ValidateIssuer = false,
+                    //         ValidateAudience = false,
+                    //         ValidateLifetime = true,
+                    //         ValidateIssuerSigningKey = true,
+                    //
+                    //         IssuerSigningKey =
+                    //             new SymmetricSecurityKey(
+                    //                 Encoding.UTF8.GetBytes(
+                    //                     configuration.GetSection("Jwt:SecretKey").Get<string>()
+                    //                     ?? throw new AuthenticationException()))
+                    //     };
+                    // },
                     OnMessageReceived = context =>
                     {
                         context.Token = context.Request.Cookies["yummy-cookies"];
@@ -42,9 +71,10 @@ public static class ApiExtensions
                     OnChallenge = async context =>
                     {
                         context.HandleResponse();
-                        var errorInfo = new ErrorInfo(Errors.General.UnAuthorized("User unauthorized."));
+
+                        var errorInfo = new ErrorInfo(Errors.General.UnAuthorized("User is unauthorized"));
                         var envelope = Envelope.Error([errorInfo]);
-                    
+
                         context.Response.ContentType = "application/json";
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         await context.Response.WriteAsJsonAsync(envelope);
@@ -53,7 +83,7 @@ public static class ApiExtensions
                     {
                         var errorInfo = new ErrorInfo(Errors.General.Forbidden("User has not permission."));
                         var envelope = Envelope.Error([errorInfo]);
-                        
+
                         context.Response.ContentType = "application/json";
                         context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                         await context.Response.WriteAsJsonAsync(envelope);
@@ -86,6 +116,19 @@ public static class ApiExtensions
                 }
             });
         });
+        return services;
+    }
+
+    public static IServiceCollection ConfigureLogging(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.Debug()
+            .WriteTo.Seq(configuration.GetSection("Seq").Value
+                         ?? throw new ApplicationException("Seq configuration is empty"))
+            .CreateLogger();
+        services.AddSerilog();
         return services;
     }
 }
