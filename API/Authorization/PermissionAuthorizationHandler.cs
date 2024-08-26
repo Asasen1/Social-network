@@ -1,6 +1,5 @@
 ﻿using API.Attributes;
 using Domain.Constants;
-using Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Authorization;

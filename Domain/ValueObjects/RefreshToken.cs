@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Domain.Common;
+﻿using Domain.Common;
 using Domain.Common.Models;
 
 namespace Domain.ValueObjects;

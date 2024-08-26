@@ -1,13 +1,10 @@
-﻿using API.Attributes;
-using Application.DTO;
+﻿using Application.DTO;
 using Application.Features.Login;
 using Application.Providers;
-using Domain.Common;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
-using Infrastructure.Providers;
 using Infrastructure.Queries.GetUserById;
 using Microsoft.AspNetCore.Mvc;
 
@@ -88,14 +85,14 @@ public class UserController : ApplicationController
         return Ok();
     }
 
-    // [HttpPost("refresh")]
-    // public async Task<IActionResult> Test([FromForm] TokenDto dto,
-    //     [FromServices] IJwtProvider provider,
-    //     CancellationToken ct)
-    // {
-    //     var result = await provider.Refresh(HttpContext, dto, ct);
-    //     if (result.IsFailure)
-    //         return BadRequest(result.Error);
-    //     return Ok(result.Value);
-    // }
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Test([FromForm] TokenDto dto,
+        [FromServices] IJwtProvider provider,
+        CancellationToken ct)
+    {
+        var result = await provider.Refresh(HttpContext, dto, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
+    }
 }

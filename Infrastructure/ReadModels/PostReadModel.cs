@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Infrastructure.ReadModels;
+﻿namespace Infrastructure.ReadModels;
 
 public class PostReadModel
 {

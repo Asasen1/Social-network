@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace Domain.Common;
+﻿namespace Domain.Common;
 
 public static class Permissions
 {

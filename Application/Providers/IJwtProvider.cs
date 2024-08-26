@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Application.DTO;
+﻿using Application.DTO;
 using Domain.Agregates;
 using Domain.Common;
 using Domain.ValueObjects;
@@ -11,5 +10,5 @@ public interface IJwtProvider
 {
     Result<string> GenerateAccessToken(User user);
     public Result<RefreshToken> GenerateRefreshToken();
-    public Task<Result<TokenDto>> Refresh(HttpContext context, string accessToken, CancellationToken ct = default);
+    public Task<Result<TokenDto>> Refresh(HttpContext context, TokenDto tokenDto, CancellationToken ct = default);
 }

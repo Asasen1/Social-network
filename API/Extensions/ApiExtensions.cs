@@ -1,12 +1,9 @@
 ﻿using System.Net;
-using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Text;
 using API.Authorization;
 using API.Contracts;
-using Application.Providers;
 using Domain.Common;
-using Infrastructure.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -41,28 +38,6 @@ public static class ApiExtensions
                 };
                 options.Events = new JwtBearerEvents
                 {
-                    // OnAuthenticationFailed = async context =>
-                    // {
-                    //     var jwtProvider =
-                    //         context.HttpContext.RequestServices.GetRequiredService<IJwtProvider>();
-                    //     var result = await jwtProvider.Refresh(context.HttpContext,
-                    //         context.HttpContext.Request.Cookies["yummy-cookies"]);
-                    //     context.Options.TokenValidationParameters = new TokenValidationParameters
-                    //     {
-                    //         LifetimeValidator = (before, expires, token, parameters) =>
-                    //             expires != null && expires > DateTime.UtcNow,
-                    //         ValidateIssuer = false,
-                    //         ValidateAudience = false,
-                    //         ValidateLifetime = true,
-                    //         ValidateIssuerSigningKey = true,
-                    //
-                    //         IssuerSigningKey =
-                    //             new SymmetricSecurityKey(
-                    //                 Encoding.UTF8.GetBytes(
-                    //                     configuration.GetSection("Jwt:SecretKey").Get<string>()
-                    //                     ?? throw new AuthenticationException()))
-                    //     };
-                    // },
                     OnMessageReceived = context =>
                     {
                         context.Token = context.Request.Cookies["yummy-cookies"];

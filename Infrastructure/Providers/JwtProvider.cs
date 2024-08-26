@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,7 +12,9 @@ using Domain.Common;
 using Domain.Constants;
 using Domain.ValueObjects;
 using Infrastructure.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -47,7 +50,7 @@ public class JwtProvider : IJwtProvider
         {
             Subject = new(claims),
             SigningCredentials = new(symmetricSecurityKey, SecurityAlgorithms.HmacSha256),
-            Expires = DateTime.UtcNow.AddSeconds(_options.ExpiresAccess)
+            Expires = DateTime.UtcNow.AddHours(_options.ExpiresAccess)
         };
         var token = jwtHandler.CreateToken(tokenDescriptor);
         return token;
@@ -64,14 +67,14 @@ public class JwtProvider : IJwtProvider
 
 
     public async Task<Result<TokenDto>> Refresh(HttpContext context,
-        string accessToken,
-        CancellationToken ct = default)
+        TokenDto tokenDto,
+        CancellationToken ct)
     {
-        var principal = GetPrincipalFromExpiredToken(accessToken);
+        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
         if (principal.IsFailure)
             return principal.Error;
 
-        var user = await CheckExpired(principal.Value, ct);
+        var user = await CheckExpired(principal.Value, tokenDto.RefreshToken, ct);
         if (user.IsFailure)
             return user.Error;
 
@@ -87,7 +90,7 @@ public class JwtProvider : IJwtProvider
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = false,
+            ValidateLifetime = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey))
         };
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -100,7 +103,9 @@ public class JwtProvider : IJwtProvider
     }
 
     private async Task<Result<User>> CheckExpired(
-        ClaimsPrincipal principal, CancellationToken ct)
+        ClaimsPrincipal principal,
+        string refreshToken,
+        CancellationToken ct)
     {
         var userIds = principal.Claims.Where(c => c.Type == AuthenticationConstants.UserId)
             .Select(t => t.Value);
@@ -114,7 +119,8 @@ public class JwtProvider : IJwtProvider
             return userResult.Error;
         var user = userResult.Value;
 
-        if (user.RefreshToken.Expires <= DateTime.UtcNow)
+        if (user.RefreshToken.Token != refreshToken ||
+            user.RefreshToken.Expires <= DateTime.UtcNow)
             return Errors.General.TokenSmell("Expiration time is failure or invalid token");
         return user;
     }

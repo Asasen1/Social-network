@@ -1,7 +1,5 @@
 ﻿using Domain.Agregates;
-using Domain.Constants;
 using Domain.Constraints;
-using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
