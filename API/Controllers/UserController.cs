@@ -39,7 +39,7 @@ public class UserController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HasPermission(Permissions.Post.Delete)]
+    // [HasPermission(Permissions.Post.Delete)]
     [HttpGet]
     public async Task<IActionResult> GetById(
         [FromServices] GetUserByIdQuery query,

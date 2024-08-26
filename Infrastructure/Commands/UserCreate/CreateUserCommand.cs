@@ -46,7 +46,7 @@ public class CreateUserCommand : ICommandHandler<CreateUserRequest>
         
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         if (passwordHash is null)
-            return Errors.General.Iternal("password");
+            return Errors.General.Internal("password");
 
         var user = User.Create(
             mail.Value,

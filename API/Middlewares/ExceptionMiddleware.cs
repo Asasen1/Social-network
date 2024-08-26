@@ -39,7 +39,7 @@ public class ExceptionMiddleware
                 await context.Response.WriteAsJsonAsync(envelopeU);
                 return;
             }
-            var errorInfo = new ErrorInfo(Errors.General.Iternal(ex.Message));
+            var errorInfo = new ErrorInfo(Errors.General.Internal(ex.Message));
             var envelope = Envelope.Error([errorInfo]);
 
             context.Response.ContentType = "application/json";

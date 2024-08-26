@@ -35,7 +35,7 @@ public static class Errors
 {
     public static class General
     {
-        public static Error Iternal(string message)
+        public static Error Internal(string message)
             => new("iternal", message); 
         public static Error UnAuthorized(string message)
             => new("user.unauthorized", message); 

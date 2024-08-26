@@ -1,11 +1,8 @@
 ﻿using Application.Abstractions;
 using Application.DTO;
 using Dapper;
-using Domain.Agregates;
 using Domain.Common;
-using Domain.Entities;
-using System.Threading;
-using System.Threading.Tasks;
+using kp.Dapper.Handlers;
 
 namespace Infrastructure.Queries.GetUserById
 {
@@ -15,6 +12,7 @@ namespace Infrastructure.Queries.GetUserById
 
         public GetUserByIdQuery(SqlConnectionFactory factory)
         {
+            SqlMapper.AddTypeHandler(new SqlDateOnlyTypeHandler());
             _factory = factory;
         }
 
@@ -22,32 +20,22 @@ namespace Infrastructure.Queries.GetUserById
         {
             using var connection = _factory.CreateConnection();
             connection.Open();
-
-            var sql = @"
-                     SELECT u.id AS Id,
-    u.first_name AS FirstName,
-    u.second_name AS SecondName,
-    u.nickname AS Nickname,
-    u.birth_date AS BirthDate,
-    u.description AS Description,
-    ph.id AS PhotoId,
-    ph.path AS PhotoPath,
-    ph.is_main AS IsMain,
-    ph.user_id AS UserId
-FROM users u
-LEFT JOIN user_photos ph ON u.id = ph.user_id
-WHERE u.id = @id AND ph.is_main = true
-
-                      ";
-
-            var users = await connection.QueryAsync<UserDto, PhotoDto, UserDto>(
-                sql,
-                (user, photo) =>
-                {
-                    user.Avatar = photo;
-                    return user;
-                }, splitOn: "id", param: new { id = request.Id });
-            var user = users.FirstOrDefault();
+            var sql = $"""
+                       SELECT
+                       u.id AS Id,
+                       u.first_name AS {nameof(UserDto.FirstName)},
+                       u.second_name AS {nameof(UserDto.SecondName)},
+                       u.nickname AS {nameof(UserDto.Nickname)},
+                       u.description AS {nameof(UserDto.Description)},
+                       u.birth_date AS {nameof(UserDto.BirthDate)}
+                       FROM users AS u
+                       WHERE Id = @userId
+                       """;
+            var user = await connection.QueryFirstOrDefaultAsync<UserDto>
+                (sql, new { userId = request.Id });
+            if (user is null)
+                return Errors.General.NotFound(request.Id);
+            
             return new GetUserByIdResponse(user);
         }
     }

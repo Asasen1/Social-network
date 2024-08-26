@@ -2,20 +2,18 @@
 
 public class UserDto
 {
-    public Guid Id { get; init; }
-    public string FirstName { get; init; } 
-    public string SecondName { get; init; } 
-    public string Nickname { get; init; } 
-    public DateOnly? BirthDate { get; init; } 
-    public string? Description { get; init; } 
-    public PhotoDto? Avatar { get; set; } 
+    public Guid Id { get; set; }
+    public string FirstName { get; set; } 
+    public string SecondName { get; set; } 
+    public string Nickname { get; set; } 
+    public DateOnly? BirthDate { get; set; } 
+    public string? Description { get; set; }
 
     public UserDto()
     {
         
     }
-
-    public UserDto(Guid id, string firstName, string secondName, string nickname, DateOnly? birthDate, string? description, PhotoDto? avatar)
+    public UserDto(Guid id, string firstName, string secondName, string nickname, DateOnly? birthDate, string? description)
     {
         Id = id;
         FirstName = firstName;
@@ -23,7 +21,6 @@ public class UserDto
         Nickname = nickname;
         BirthDate = birthDate;
         Description = description;
-        Avatar = avatar;
     }
     
 }

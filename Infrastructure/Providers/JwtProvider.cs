@@ -107,7 +107,7 @@ public class JwtProvider : IJwtProvider
         var userId = userIds.SingleOrDefault();
         var isGuid = Guid.TryParse(userId, out var id);
         if (!isGuid)
-            return Errors.General.Iternal("Error with refresh");
+            return Errors.General.Internal("Error with refresh");
 
         var userResult = await _repository.GetById(id, ct);
         if (userResult.IsFailure)
