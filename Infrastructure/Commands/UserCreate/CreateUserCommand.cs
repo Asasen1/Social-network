@@ -1,7 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Agregates;
 using Domain.Common;
-using Domain.Entities;
 using Domain.ValueObjects;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;

@@ -20,7 +20,6 @@ builder.Services.AddApiHandlers();
 
 builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
-
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();

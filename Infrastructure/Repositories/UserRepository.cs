@@ -1,7 +1,6 @@
 ﻿using Application.Features;
 using Domain.Agregates;
 using Domain.Common;
-using Domain.Entities;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
