@@ -1,5 +1,3 @@
-using Application.DataAccess;
-
 namespace API.Handlers;
 
 public class CookieHandler

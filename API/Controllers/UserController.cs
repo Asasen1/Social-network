@@ -1,15 +1,11 @@
-﻿using API.Attributes;
-using API.Handlers;
+﻿using API.Handlers;
 using Application.DTO;
 using Application.Features.Login;
 using Application.Features.RefreshToken;
-using Application.Providers;
-using Domain.Common;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
-using Infrastructure.Providers;
 using Infrastructure.Queries.GetUserById;
 using Microsoft.AspNetCore.Mvc;
 

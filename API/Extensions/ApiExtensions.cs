@@ -1,13 +1,10 @@
 ﻿using System.Net;
-using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using System.Text;
 using API.Authorization;
 using API.Contracts;
 using API.Handlers;
-using Application.Providers;
 using Domain.Common;
-using Infrastructure.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;

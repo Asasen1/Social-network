@@ -11,7 +11,6 @@ using Domain.Common;
 using Domain.Constants;
 using Domain.ValueObjects;
 using Infrastructure.Options;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;

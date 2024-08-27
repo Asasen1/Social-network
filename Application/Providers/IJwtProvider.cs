@@ -3,7 +3,6 @@ using Application.DTO;
 using Domain.Agregates;
 using Domain.Common;
 using Domain.ValueObjects;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Providers;
 
