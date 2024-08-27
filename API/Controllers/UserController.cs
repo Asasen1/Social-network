@@ -1,6 +1,8 @@
 ﻿using API.Attributes;
+using API.Handlers;
 using Application.DTO;
 using Application.Features.Login;
+using Application.Features.RefreshToken;
 using Application.Providers;
 using Domain.Common;
 using Infrastructure.Commands.AddFriend;
@@ -88,14 +90,18 @@ public class UserController : ApplicationController
         return Ok();
     }
 
-    // [HttpPost("refresh")]
-    // public async Task<IActionResult> Test([FromForm] TokenDto dto,
-    //     [FromServices] IJwtProvider provider,
-    //     CancellationToken ct)
-    // {
-    //     var result = await provider.Refresh(HttpContext, dto, ct);
-    //     if (result.IsFailure)
-    //         return BadRequest(result.Error);
-    //     return Ok(result.Value);
-    // }
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshTokens([FromForm] TokenDto dto,
+        [FromServices] RefreshTokenHandler tokenHandler,
+        [FromServices] CookieHandler cookieHandler,
+        CancellationToken ct)
+    {
+        var result = await tokenHandler.Handle(dto, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        
+        cookieHandler.Handle(HttpContext, "yummy-cookies", result.Value.AccessToken, 15);
+        
+        return Ok(result.Value);
+    }
 }

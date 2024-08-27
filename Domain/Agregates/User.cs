@@ -11,7 +11,7 @@ public class User : Entity
     public string PasswordHash { get; private set; }
     public Role Role { get; private set; }
     public RefreshToken RefreshToken { get; private set; }
-    
+
     public FullName FullName { get; private set; }
     public string Nickname { get; private set; }
     public DateOnly? BirthDate { get; private set; }
@@ -48,7 +48,7 @@ public class User : Entity
         Description = description;
         CreatedDate = createdDate;
     }
-    
+
     public static Result<User> Create(
         Email email,
         string passwordHash,
@@ -58,7 +58,7 @@ public class User : Entity
         string? description)
     {
         var token = RefreshToken.Create(string.Empty, DateTime.MinValue).Value;
-        
+
         return new User(
             email,
             passwordHash,
@@ -85,11 +85,13 @@ public class User : Entity
         _friends.Remove(friend);
         return _friends;
     }
+
     public Result<List<UserPhoto>> AddPhoto(UserPhoto photo)
     {
         _photos.Add(photo);
         return _photos;
     }
+
     public Result<List<UserPhoto>> RemovePhoto(UserPhoto photo)
     {
         _photos.Remove(photo);

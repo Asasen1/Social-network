@@ -62,23 +62,7 @@ public class JwtProvider : IJwtProvider
             DateTime.UtcNow.AddDays(_options.ExpiresRefresh));
     }
 
-
-    public async Task<Result<TokenDto>> Refresh(HttpContext context,
-        string accessToken,
-        CancellationToken ct = default)
-    {
-        var principal = GetPrincipalFromExpiredToken(accessToken);
-        if (principal.IsFailure)
-            return principal.Error;
-
-        var user = await CheckExpired(principal.Value, ct);
-        if (user.IsFailure)
-            return user.Error;
-
-        return await UpdateTokens(context, user.Value, ct);
-    }
-
-    private Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken)
+    public Result<ClaimsPrincipal> GetPrincipalFromExpiredToken(string accessToken)
     {
         if (accessToken.IsEmpty())
             return Errors.General.ValueIsRequired();
@@ -99,8 +83,10 @@ public class JwtProvider : IJwtProvider
         return claimsPrincipal;
     }
 
-    private async Task<Result<User>> CheckExpired(
-        ClaimsPrincipal principal, CancellationToken ct)
+    public async Task<Result<User>> CheckExpired(
+        ClaimsPrincipal principal,
+        string refreshToken,
+        CancellationToken ct)
     {
         var userIds = principal.Claims.Where(c => c.Type == AuthenticationConstants.UserId)
             .Select(t => t.Value);
@@ -114,26 +100,19 @@ public class JwtProvider : IJwtProvider
             return userResult.Error;
         var user = userResult.Value;
 
-        if (user.RefreshToken.Expires <= DateTime.UtcNow)
+        if (user.RefreshToken.Token != refreshToken ||
+            user.RefreshToken.Expires <= DateTime.UtcNow)
             return Errors.General.TokenSmell("Expiration time is failure or invalid token");
         return user;
     }
 
-    private async Task<Result<TokenDto>> UpdateTokens(
-        HttpContext context,
+    public async Task<Result<TokenDto>> UpdateTokens(
         User user,
         CancellationToken ct)
     {
         var accessToken = GenerateAccessToken(user).Value;
         var refreshToken = GenerateRefreshToken().Value;
         user.UpdateRefresh(refreshToken);
-        context.Response.Cookies.Append("yummy-cookies", accessToken,
-            new CookieOptions
-            {
-                Expires = new DateTimeOffset(DateTime.UtcNow.AddHours(_options.ExpiresAccess)),
-                HttpOnly = true,
-                Secure = true,
-            });
         await _transaction.SaveChangesAsync(ct);
         return new TokenDto(accessToken, refreshToken.Token);
     }

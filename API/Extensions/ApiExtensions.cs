@@ -4,6 +4,7 @@ using System.Security.Authentication;
 using System.Text;
 using API.Authorization;
 using API.Contracts;
+using API.Handlers;
 using Application.Providers;
 using Domain.Common;
 using Infrastructure.Providers;
@@ -129,6 +130,11 @@ public static class ApiExtensions
                          ?? throw new ApplicationException("Seq configuration is empty"))
             .CreateLogger();
         services.AddSerilog();
+        return services;
+    }
+    public static IServiceCollection AddApiHandlers(this IServiceCollection services)
+    {
+        services.AddScoped<CookieHandler>();
         return services;
     }
 }

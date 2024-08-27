@@ -15,7 +15,7 @@ public class AddFriendCommand(WriteDbContext dbContext) : ICommandHandler<AddFri
         var friend = await dbContext.Users
             .Include(u => u.Friends)
             .FirstOrDefaultAsync(u => u.Id == request.FriendId, ct);
-
+        
         if (user == null)
             return Errors.General.NotFound(request.UserId);
         if (friend == null)

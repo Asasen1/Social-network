@@ -14,16 +14,16 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
     configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
 });
 builder.Services.AddAuth(builder.Configuration);
-builder.Services.ConfigureLogging(builder.Configuration);
 builder.Services.AddAuthorization();
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.ConfigureLogging(builder.Configuration);
+builder.Services.AddApiHandlers();
+
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseMiddleware<RefreshMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 if (app.Environment.IsDevelopment())
