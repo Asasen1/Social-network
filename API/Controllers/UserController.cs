@@ -1,7 +1,9 @@
-﻿using Infrastructure.Commands.AddFriend;
+﻿using Application.Providers;
+using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
+using Infrastructure.Providers;
 using Infrastructure.Queries.GetAllUsers;
 using Infrastructure.Queries.GetUserById;
 using Microsoft.AspNetCore.Mvc;
@@ -71,8 +73,8 @@ public class UserController : ApplicationController
             return BadRequest(result.Error);
         return Ok();
     }
-    [HttpGet("test")]
-    public async Task<IActionResult> Test(
+    [HttpGet("All")]
+    public async Task<IActionResult> GetUsers(
         [FromServices] GetAllUsersQuery query,
         [FromQuery] GetAllUsersRequest request,
         CancellationToken ct)

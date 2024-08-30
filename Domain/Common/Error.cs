@@ -81,6 +81,11 @@ public static class Errors
             var label = name ?? "Value";
             return new("record.remove.failure", $"{label} failed to remove");
         }
+        public static Error GetFailure(string? name = null)
+        {
+            var label = name ?? "Value";
+            return new("record.get.failure", $"{label} failed to get");
+        }
     }
 
     public static class UserErrors
