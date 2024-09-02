@@ -6,7 +6,7 @@ using Infrastructure.DbContexts;
 
 namespace Infrastructure.Commands.UploadPhoto;
 
-public class UploadPhotoCommand : ICommandHandler<UploadPhotoRequest>
+public class UploadPhotoCommand : ICommandHandler<UploadPhotoData>
 {
     private readonly IMinioProvider _provider;
     private readonly WriteDbContext _dbcontext;
@@ -17,22 +17,22 @@ public class UploadPhotoCommand : ICommandHandler<UploadPhotoRequest>
         _dbcontext = dbcontext;
     }
 
-    public async Task<Result> Handle(UploadPhotoRequest request, CancellationToken ct)
+    public async Task<Result> Handle(UploadPhotoData data, CancellationToken ct)
     {
         var photoId = Guid.NewGuid();
-        var path = photoId + Path.GetExtension(request.File.FileName);
+        var path = photoId + Path.GetExtension(data.FileName);
         
-        await using var stream = request.File.OpenReadStream();
-        var photoResult = await _provider.UploadPhoto(stream, path, ct);
+        
+        var photoResult = await _provider.UploadPhoto(data.Stream, path, ct);
         if (photoResult.IsFailure)
             return photoResult.Error;
         
-        var user = await _dbcontext.Users.FindAsync(new object?[] { request.UserId, ct }, cancellationToken: ct);
+        var user = await _dbcontext.Users.FindAsync(new object?[] { data.UserId, ct }, cancellationToken: ct);
         if (user == null)
-            return Errors.General.NotFound(request.UserId);
+            return Errors.General.NotFound(data.UserId);
         
         var userPhoto =
-            UserPhoto.CreateAndActivate(path, request.File.ContentType, request.File.Length, request.IsMain);
+            UserPhoto.CreateAndActivate(path, data.ContentType, data.FileLength, data.IsMain);
         if (userPhoto.IsFailure)
             return userPhoto.Error;
         

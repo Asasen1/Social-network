@@ -6,7 +6,7 @@ using Domain.ValueObjects;
 
 namespace Application.Providers;
 
-public interface IJwtProvider
+public interface IFileProvider
 {
     Result<string> GenerateAccessToken(User user);
     public Result<RefreshToken> GenerateRefreshToken();

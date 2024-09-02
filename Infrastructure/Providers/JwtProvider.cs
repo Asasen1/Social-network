@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Providers;
 
-public class JwtProvider : IJwtProvider
+public class JwtProvider : IFileProvider
 {
     private readonly IUserRepository _repository;
     private readonly ITransaction _transaction;

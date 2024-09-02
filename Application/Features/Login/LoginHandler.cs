@@ -11,12 +11,12 @@ public class LoginHandler
     private readonly IUserRepository _userRepository;
     private readonly ITransaction _transaction;
     private readonly IConfiguration _configuration;
-    private readonly IJwtProvider _jwtProvider;
+    private readonly IFileProvider _jwtProvider;
 
     public LoginHandler(ITransaction transaction,
         IConfiguration configuration,
         IUserRepository userRepository,
-        IJwtProvider jwtProvider)
+        IFileProvider jwtProvider)
     {
         _transaction = transaction;
         _configuration = configuration;

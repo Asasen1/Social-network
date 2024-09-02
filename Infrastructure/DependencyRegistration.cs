@@ -16,15 +16,11 @@ public static class DependencyRegistration
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<WriteDbContext>();
-        services.AddScoped<ReadDbContext>();
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddProviders();
         services.AddCommandsAndQueries();
         services.AddDataStorages(configuration);
         services.ConfigureOptions(configuration);
         services.AddRepositories();
-        services.AddSingleton<SqlConnectionFactory>();
         return services;
     }
 
@@ -41,12 +37,17 @@ public static class DependencyRegistration
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
-        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IFileProvider, JwtProvider>();
         services.AddScoped<ITransaction, Transaction>();
         return services;
     }
     private static IServiceCollection AddDataStorages(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<WriteDbContext>();
+        services.AddScoped<ReadDbContext>();
+        
+        services.AddSingleton<SqlConnectionFactory>();
+        
         services.AddMinio(options =>
         {
             var minioOptions = configuration.GetSection(MinioOptions.Minio)

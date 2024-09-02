@@ -1,6 +1,4 @@
-﻿using System.Reactive.Linq;
-using System.Text;
-using Application.Providers;
+﻿using Application.Providers;
 using Domain.Common;
 using Microsoft.Extensions.Logging;
 using Minio;

@@ -1,9 +1,8 @@
-﻿using Application.Providers;
+﻿using API.Requests;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
 using Infrastructure.Commands.UserCreate;
-using Infrastructure.Providers;
 using Infrastructure.Queries.GetAllUsers;
 using Infrastructure.Queries.GetUserById;
 using Microsoft.AspNetCore.Mvc;
@@ -49,14 +48,23 @@ public class UserController : ApplicationController
             return BadRequest(result.Error);
         return Ok();
     }
-
+    
     [HttpPost("photo")]
     public async Task<IActionResult> PublishPhoto(
         [FromServices] UploadPhotoCommand command,
-        [FromForm] UploadPhotoRequest request,
+        [FromBody] UploadPhotoRequest request,
         CancellationToken ct)
     {
-        var result = await command.Handle(request, ct);
+        using var stream = request.File.OpenReadStream();
+        var data = new UploadPhotoData(
+            request.UserId, 
+            stream, 
+            request.File.FileName, 
+            request.File.ContentType, 
+            request.File.Length, 
+            request.IsMain);
+        
+        var result = await command.Handle(data, ct);
         if (result.IsFailure)
             return BadRequest(result.Error);
         return Ok();
@@ -73,7 +81,7 @@ public class UserController : ApplicationController
             return BadRequest(result.Error);
         return Ok();
     }
-    [HttpGet("All")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetUsers(
         [FromServices] GetAllUsersQuery query,
         [FromQuery] GetAllUsersRequest request,
