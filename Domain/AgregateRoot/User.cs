@@ -3,7 +3,7 @@ using Domain.Common.Models;
 using Domain.Entities;
 using Domain.ValueObjects;
 
-namespace Domain.Agregates;
+namespace Domain.AgregateRoot;
 
 public class User : Entity
 {

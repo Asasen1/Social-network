@@ -1,4 +1,4 @@
-﻿namespace Domain.Common;
+﻿namespace Domain.Constants;
 
 public static class Permissions
 {

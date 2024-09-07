@@ -8,10 +8,10 @@ namespace Infrastructure.Commands.UploadPhoto;
 
 public class UploadPhotoCommand : ICommandHandler<UploadPhotoData>
 {
-    private readonly IMinioProvider _provider;
+    private readonly IFileProvider _provider;
     private readonly WriteDbContext _dbcontext;
 
-    public UploadPhotoCommand(IMinioProvider provider, WriteDbContext dbcontext)
+    public UploadPhotoCommand(IFileProvider provider, WriteDbContext dbcontext)
     {
         _provider = provider;
         _dbcontext = dbcontext;

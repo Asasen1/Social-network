@@ -52,7 +52,7 @@ public class UserController : ApplicationController
     [HttpPost("photo")]
     public async Task<IActionResult> PublishPhoto(
         [FromServices] UploadPhotoCommand command,
-        [FromBody] UploadPhotoRequest request,
+        [FromForm] UploadPhotoRequest request,
         CancellationToken ct)
     {
         using var stream = request.File.OpenReadStream();

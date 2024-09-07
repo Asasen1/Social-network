@@ -1,5 +1,5 @@
 ﻿using Application.Features;
-using Domain.Agregates;
+using Domain.AgregateRoot;
 using Domain.Common;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;

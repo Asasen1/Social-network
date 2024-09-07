@@ -3,7 +3,7 @@ using Minio.DataModel;
 
 namespace Application.Providers;
 
-public interface IMinioProvider
+public interface IFileProvider
 {
     public Task<Result<string>> UploadPhoto(Stream stream, string path, CancellationToken ct);
     public Task<Result<List<string>>> GetPhotos(IEnumerable<string> paths, CancellationToken ct);

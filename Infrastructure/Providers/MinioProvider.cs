@@ -7,13 +7,13 @@ using Minio.DataModel.Args;
 
 namespace Infrastructure.Providers;
 
-public class MinioProvider : IMinioProvider
+public class FileProvider : IFileProvider
 {
     private const string PhotoBucket = "images";
     private readonly IMinioClient _minioClient;
-    private readonly ILogger<MinioProvider> _logger;
+    private readonly ILogger<FileProvider> _logger;
 
-    public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
+    public FileProvider(IMinioClient minioClient, ILogger<FileProvider> logger)
     {
         _minioClient = minioClient;
         _logger = logger;

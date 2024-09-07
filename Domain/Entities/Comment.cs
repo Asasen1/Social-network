@@ -1,4 +1,4 @@
-﻿using Domain.Agregates;
+﻿using Domain.AgregateRoot;
 using Domain.Common.Models;
 
 namespace Domain.Entities;

@@ -1,5 +1,5 @@
 ﻿using Application.CommonValidators;
-using Domain.Agregates;
+using Domain.AgregateRoot;
 using FluentValidation;
 
 namespace Application.Validators;

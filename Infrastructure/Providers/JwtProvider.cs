@@ -6,7 +6,7 @@ using Application.DataAccess;
 using Application.DTO;
 using Application.Features;
 using Application.Providers;
-using Domain.Agregates;
+using Domain.AgregateRoot;
 using Domain.Common;
 using Domain.Constants;
 using Domain.ValueObjects;
@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Providers;
 
-public class JwtProvider : IFileProvider
+public class JwtProvider : IJwtProvider
 {
     private readonly IUserRepository _repository;
     private readonly ITransaction _transaction;

@@ -1,6 +1,7 @@
 ﻿using Application.DataAccess;
 using Application.Features;
 using Application.Providers;
+using Domain.Common;
 using Infrastructure.DbContexts;
 using Infrastructure.Options;
 using Infrastructure.Providers;
@@ -36,9 +37,10 @@ public static class DependencyRegistration
     }
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
-        services.AddScoped<IMinioProvider, MinioProvider>();
-        services.AddScoped<IFileProvider, JwtProvider>();
+        services.AddScoped<IFileProvider, FileProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<ITransaction, Transaction>();
+        services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         return services;
     }
     private static IServiceCollection AddDataStorages(this IServiceCollection services, IConfiguration configuration)

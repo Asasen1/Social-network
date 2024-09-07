@@ -15,27 +15,27 @@ public class Role : ValueObject
 
     public static readonly Role Admin = new(nameof(Admin).ToUpper(),
         [
-            Common.Permissions.Post.Update,
-            Common.Permissions.Post.Delete,
-            Common.Permissions.Post.Create,
-            Common.Permissions.Post.Read,
+            Constants.Permissions.Post.Update,
+            Constants.Permissions.Post.Delete,
+            Constants.Permissions.Post.Create,
+            Constants.Permissions.Post.Read,
             
-            Common.Permissions.User.Update,
-            Common.Permissions.User.Delete,
-            Common.Permissions.User.Create,
-            Common.Permissions.User.Read
+            Constants.Permissions.User.Update,
+            Constants.Permissions.User.Delete,
+            Constants.Permissions.User.Create,
+            Constants.Permissions.User.Read
         ]
     );
     public static readonly Role User = new(nameof(User).ToUpper(),
         [
-            Common.Permissions.Post.Update,
-            Common.Permissions.Post.Create,
-            Common.Permissions.Post.Read,
+            Constants.Permissions.Post.Update,
+            Constants.Permissions.Post.Create,
+            Constants.Permissions.Post.Read,
             
-            Common.Permissions.User.Update,
-            Common.Permissions.User.Delete,
-            Common.Permissions.User.Create,
-            Common.Permissions.User.Read
+            Constants.Permissions.User.Update,
+            Constants.Permissions.User.Delete,
+            Constants.Permissions.User.Create,
+            Constants.Permissions.User.Read
         ]
     );
     protected override IEnumerable<object> GetEqualityComponents()

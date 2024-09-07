@@ -8,10 +8,10 @@ namespace Infrastructure.Commands.DeletePhoto;
 
 public class DeletePhotoCommand : ICommandHandler<DeletePhotoRequest>
 {
-    private readonly IMinioProvider _provider;
+    private readonly IFileProvider _provider;
     private readonly WriteDbContext _dbContext;
 
-    public DeletePhotoCommand(IMinioProvider provider, WriteDbContext dbContext)
+    public DeletePhotoCommand(IFileProvider provider, WriteDbContext dbContext)
     {
         _provider = provider;
         _dbContext = dbContext;

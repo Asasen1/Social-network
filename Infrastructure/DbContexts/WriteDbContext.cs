@@ -1,4 +1,4 @@
-﻿using Domain.Agregates;
+﻿using Domain.AgregateRoot;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

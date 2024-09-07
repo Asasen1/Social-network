@@ -6,9 +6,9 @@ namespace Application.Features.RefreshToken;
 
 public class RefreshTokenHandler
 {
-    private readonly IFileProvider _provider;
+    private readonly IJwtProvider _provider;
 
-    public RefreshTokenHandler(IFileProvider provider)
+    public RefreshTokenHandler(IJwtProvider provider)
     {
         _provider = provider;
     }

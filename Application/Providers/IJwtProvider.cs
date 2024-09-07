@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 using Application.DTO;
-using Domain.Agregates;
+using Domain.AgregateRoot;
 using Domain.Common;
 using Domain.ValueObjects;
 
 namespace Application.Providers;
 
-public interface IFileProvider
+public interface IJwtProvider
 {
     Result<string> GenerateAccessToken(User user);
     public Result<RefreshToken> GenerateRefreshToken();

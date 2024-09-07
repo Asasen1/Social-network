@@ -2,21 +2,38 @@ using API.Handlers;
 using Application.DTO;
 using Application.Features.Login;
 using Application.Features.RefreshToken;
+using Infrastructure.Options;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace API.Controllers;
 
 public class AuthController : ApplicationController
 {
+    private readonly JwtOptions _jwtOptions;
+
+    public AuthController(IOptions<JwtOptions> jwtOptions)
+    {
+        _jwtOptions = jwtOptions.Value;
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromServices] LoginHandler handler,
+        [FromServices] CookieHandler cookieHandler,
         [FromForm] LoginRequest request,
         CancellationToken ct)
     {
-        var result = await handler.Handle(HttpContext, request, ct);
+        var result = await handler.Handle(request, ct);
         if (result.IsFailure)
             return BadRequest(result.Error);
+
+        cookieHandler.Handle(
+            HttpContext,
+            "yummy-cookies",
+            result.Value.AccessToken,
+            _jwtOptions.ExpiresAccess);
+
         return Ok(result.Value);
     }
 
@@ -30,7 +47,11 @@ public class AuthController : ApplicationController
         if (result.IsFailure)
             return BadRequest(result.Error);
 
-        cookieHandler.Handle(HttpContext, "yummy-cookies", result.Value.AccessToken, 15);
+        cookieHandler.Handle(
+            HttpContext,
+            "yummy-cookies",
+            result.Value.AccessToken,
+            _jwtOptions.ExpiresAccess);
 
         return Ok(result.Value);
     }

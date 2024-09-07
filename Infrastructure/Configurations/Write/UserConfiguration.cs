@@ -1,4 +1,4 @@
-﻿using Domain.Agregates;
+﻿using Domain.AgregateRoot;
 using Domain.Constraints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

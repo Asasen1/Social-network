@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions;
-using Domain.Agregates;
+using Domain.AgregateRoot;
 using Domain.Common;
 using Domain.ValueObjects;
 using Infrastructure.DbContexts;

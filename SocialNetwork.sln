@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{7B0CC2B7-DDA2-4CE1-87E1-9C12245DAE55}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CDAD9E93-6063-47AD-9B33-5FFBC50F3EA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{6E0DBFAD-78A2-46D5-B14F-97C8D9C51A21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,7 +39,12 @@ Global
 		{7B0CC2B7-DDA2-4CE1-87E1-9C12245DAE55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B0CC2B7-DDA2-4CE1-87E1-9C12245DAE55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B0CC2B7-DDA2-4CE1-87E1-9C12245DAE55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E0DBFAD-78A2-46D5-B14F-97C8D9C51A21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E0DBFAD-78A2-46D5-B14F-97C8D9C51A21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E0DBFAD-78A2-46D5-B14F-97C8D9C51A21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E0DBFAD-78A2-46D5-B14F-97C8D9C51A21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6E0DBFAD-78A2-46D5-B14F-97C8D9C51A21} = {CDAD9E93-6063-47AD-9B33-5FFBC50F3EA8}
 	EndGlobalSection
 EndGlobal
