@@ -22,7 +22,7 @@ public class LoginHandlerTests
     [Fact]
     public async Task Handle_ValidCredentials_ReturnsLoginResponse()
     {
-        // Arrange
+        // arrange
         var ct = new CancellationToken();
         var userMock = User.Create(
             Email.Create("test@gmail.com").Value,
@@ -39,10 +39,10 @@ public class LoginHandlerTests
         var handler = new LoginHandler(transaction.Object, userRepository.Object, jwtProvider.Object);
         var request = new LoginRequest("test@gmail.com", "password");
 
-        // Act
+        // act
         var sut = await handler.Handle(request, ct);
         
-        // Assert
+        // assert
         sut.IsSuccess.Should().Be(true);
         sut.Value.Should().NotBeNull();
         sut.IsFailure.Should().Be(false);
