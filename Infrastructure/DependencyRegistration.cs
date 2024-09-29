@@ -3,6 +3,7 @@ using Application.Features;
 using Application.Providers;
 using Domain.Common;
 using Infrastructure.DbContexts;
+using Infrastructure.Interceptors;
 using Infrastructure.Options;
 using Infrastructure.Providers;
 using Infrastructure.Repositories;
@@ -22,6 +23,7 @@ public static class DependencyRegistration
         services.AddDataStorages(configuration);
         services.ConfigureOptions(configuration);
         services.AddRepositories();
+        services.AddInterceptors();
         return services;
     }
 
@@ -42,6 +44,11 @@ public static class DependencyRegistration
         services.AddScoped<ITransaction, Transaction>();
         services.AddSingleton<ICacheProvider, CacheProvider>();
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+        return services;
+    } 
+    private static IServiceCollection AddInterceptors(this IServiceCollection services)
+    {
+        services.AddScoped<CacheInvalidationInterceptor>();
         return services;
     }
     private static IServiceCollection AddDataStorages(this IServiceCollection services, IConfiguration configuration)
