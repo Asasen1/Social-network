@@ -40,6 +40,7 @@ public static class DependencyRegistration
         services.AddScoped<IFileProvider, FileProvider>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<ITransaction, Transaction>();
+        services.AddSingleton<ICacheProvider, CacheProvider>();
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         return services;
     }
@@ -50,6 +51,10 @@ public static class DependencyRegistration
         
         services.AddSingleton<SqlConnectionFactory>();
         
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+        });        
         services.AddMinio(options =>
         {
             var minioOptions = configuration.GetSection(MinioOptions.Minio)
