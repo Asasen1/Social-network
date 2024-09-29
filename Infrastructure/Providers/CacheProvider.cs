@@ -53,7 +53,7 @@ public class CacheProvider : ICacheProvider
         caheKyes.TryRemove(key, out _);
     }
     
-    public async Task RemoveByPrefixAsync<T>(string key, string prefix, CancellationToken ct = default)
+    public async Task RemoveByPrefixAsync(string prefix, CancellationToken ct = default)
     {
         var tasks = caheKyes.Keys
             .Where(k => k.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase))
