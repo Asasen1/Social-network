@@ -1,4 +1,5 @@
 ﻿using API.Requests;
+using Application.Providers;
 using Infrastructure.Commands.AddFriend;
 using Infrastructure.Commands.DeletePhoto;
 using Infrastructure.Commands.UploadPhoto;
@@ -11,6 +12,12 @@ namespace API.Controllers;
 
 public class UserController : ApplicationController
 {
+    private const string KEY = "user"; 
+    private readonly ICacheProvider _cacheProvider;
+    public UserController(ICacheProvider cacheProvider)
+    {
+        _cacheProvider = cacheProvider;
+    }
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromServices] CreateUserCommand command,
